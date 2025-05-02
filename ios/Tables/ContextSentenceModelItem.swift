@@ -26,6 +26,7 @@ class ContextSentenceModelItem: AttributedModelItem {
   let englishText: NSAttributedString
   var blurred = Settings.blurContextSentences
   let speechSynthesizer = AVSpeechSynthesizer()
+  let voicevox = VoicevoxClient()
 
   init(_ sentence: TKMVocabulary.Sentence,
        highlightSubject: TKMSubject,
@@ -67,12 +68,21 @@ class ContextSentenceModelItem: AttributedModelItem {
   }
 
   @objc private func readContextSentence() {
-    if speechSynthesizer.isSpeaking {
-      speechSynthesizer.stopSpeaking(at: .immediate)
+    if voicevox.isPlaying() {
+      voicevox.stopPlayback()
     } else {
-      let utterance = AVSpeechUtterance(string: japaneseText.string)
-      utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP") // Japanese voice
-      speechSynthesizer.speak(utterance)
+      voicevox.speak(text: japaneseText.string) { error in
+        if let error = error {
+          print("❌ Voicevox failed: \(error.localizedDescription)")
+          if self.speechSynthesizer.isSpeaking {
+            self.speechSynthesizer.stopSpeaking(at: .immediate)
+          } else {
+            let utterance = AVSpeechUtterance(string: self.japaneseText.string)
+            utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP") // Japanese voice
+            self.speechSynthesizer.speak(utterance)
+          }
+        }
+      }
     }
   }
 
@@ -81,7 +91,8 @@ class ContextSentenceModelItem: AttributedModelItem {
   }
 }
 
-private class ContextSentenceModelCell: AttributedModelCell, AVSpeechSynthesizerDelegate {
+private class ContextSentenceModelCell: AttributedModelCell, AVSpeechSynthesizerDelegate,
+  VoicevoxClientDelegate {
   @TypedModelItem var contextSentenceItem: ContextSentenceModelItem
 
   var blurredOverlay: UIView!
@@ -98,6 +109,7 @@ private class ContextSentenceModelCell: AttributedModelCell, AVSpeechSynthesizer
 
     blurredOverlay.alpha = contextSentenceItem.blurred ? 1 : 0
     contextSentenceItem.speechSynthesizer.delegate = self
+    contextSentenceItem.voicevox.delegate = self
   }
 
   override func layoutSubviews() {
@@ -158,6 +170,20 @@ private class ContextSentenceModelCell: AttributedModelCell, AVSpeechSynthesizer
   }
 
   func speechSynthesizer(_: AVSpeechSynthesizer, didCancel _: AVSpeechUtterance) {
+    rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
+  }
+
+  func voicevoxClientDidStartFetching() {
+    rightButton?.isEnabled = false
+  }
+
+  func voicevoxClientDidStartPlaying() {
+    rightButton?.isEnabled = true
+    rightButton?.setImage(Asset.baselineStopBlack24pt.image, for: .normal)
+  }
+
+  func voicevoxClientDidFinishPlaying() {
+    rightButton?.isEnabled = true
     rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
   }
 }
