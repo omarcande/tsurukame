@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0752EF222DC2C27300754751 /* VoicevoxClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0752EF212DC2C25C00754751 /* VoicevoxClient.swift */; };
 		0A943349E17FA7889EFEE41F /* Pods_Tsurukame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC80AAF9736A570E3C4CC09E /* Pods_Tsurukame.framework */; };
 		480B243123D6830300FC2A82 /* Rexy in Frameworks */ = {isa = PBXBuildFile; productRef = 480B243023D6830300FC2A82 /* Rexy */; };
 		481B2FED23C55AAF0041EF1F /* CurrentLevelReviewTimeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481B2FEC23C55AAF0041EF1F /* CurrentLevelReviewTimeItem.swift */; };
@@ -263,6 +264,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0752EF212DC2C25C00754751 /* VoicevoxClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicevoxClient.swift; sourceTree = "<group>"; };
 		10E5709643045C62AD6AC427 /* Pods_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		116070EC9485A78089387729 /* Pods-FontScreenshotterUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FontScreenshotterUITests.debug.xcconfig"; path = "Target Support Files/Pods-FontScreenshotterUITests/Pods-FontScreenshotterUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		1BBBD142815F6A55FA9D2C21 /* libPods-Tsurukame Complication Extension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tsurukame Complication Extension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -600,6 +602,7 @@
 				6335B46223CF0C820071671E /* AppStoreScreenshots.xctest */,
 				63F7F52D23D4C2CA006A31FB /* Audio.swift */,
 				631F34D62C36B7FE0071E983 /* BiggerTapAreaButton.swift */,
+				0752EF212DC2C25C00754751 /* VoicevoxClient.swift */,
 				63344E7F2D291C9F002A4FED /* BuildConfigs */,
 				791B8B5B2D657E2A000C8142 /* CommonErrors.swift */,
 				C90846AD237F1C770068A272 /* Complication */,
@@ -1432,6 +1435,7 @@
 				63D2DAEE275C5D4100D5F6FF /* UIControl+addAction.swift in Sources */,
 				63F7F51F23D3F335006A31FB /* ReadingModelItem.swift in Sources */,
 				E881943F2A6BC38A002C2E1C /* ArtworkManager.swift in Sources */,
+				0752EF222DC2C27300754751 /* VoicevoxClient.swift in Sources */,
 				633AFAE62352B6F2004F732F /* VocabularyHighlighter.swift in Sources */,
 				631CAD63234AD5FC008CEA73 /* AnswerChecker.swift in Sources */,
 				63C74C6825C96088004F6C99 /* SubjectChip.swift in Sources */,
