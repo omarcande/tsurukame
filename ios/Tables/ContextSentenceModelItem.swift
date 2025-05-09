@@ -186,4 +186,9 @@ private class ContextSentenceModelCell: AttributedModelCell, AVSpeechSynthesizer
     rightButton?.isEnabled = true
     rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
   }
+
+  func voicevoxClientDidThrowError() {
+    rightButton?.isEnabled = true
+    rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
+  }
 }

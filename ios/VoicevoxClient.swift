@@ -17,42 +17,40 @@ import Foundation
 
 enum VoicevoxStyle: Int, CaseIterable {
   case metanNormal = 2
-  case metanWhisper = 36
   case zundamonTsundere = 7
   case tsumugi = 8
   case hau = 10
+  case himari = 14
   case ritsuQueen = 65
-  case takemitsuJoy = 39
-  case kotaroNervous = 33
+  case takemitsuNormal = 11
+  case kensakiNormal = 21
   case ryuseiPassion = 81
   case ryuseiGentle = 84
   case soraSexy = 17
-  case mochikoCrying = 77
+  case mochikoSexy = 66
   case culSad = 25
-  case no7Announce = 30
-  case nurseRoboHorror = 49
-  case hanamaruWhisper = 71
-  case zonkoStream = 93
+  case no7Read = 31
+  case nurseRoboNormal = 47
+  case zonkoNormal = 90
 
   var displayName: String {
     switch self {
     case .metanNormal: return "四国めたん - ノーマル"
-    case .metanWhisper: return "四国めたん - ささやき"
     case .zundamonTsundere: return "ずんだもん - ツンツン"
     case .tsumugi: return "春日部つむぎ - ノーマル"
     case .hau: return "雨晴はう - ノーマル"
+    case .himari: return "冥鳴ひまり - ノーマル"
     case .ritsuQueen: return "波音リツ - クイーン"
-    case .takemitsuJoy: return "玄野武宏 - 喜び"
-    case .kotaroNervous: return "白上虎太郎 - びくびく"
+    case .takemitsuNormal: return "玄野武宏 - ノーマル"
+    case .kensakiNormal: return "剣崎雌雄 - ノーマル"
     case .ryuseiPassion: return "青山龍星 - 熱血"
     case .ryuseiGentle: return "青山龍星 - しっとり"
     case .soraSexy: return "九州そら - セクシー"
-    case .mochikoCrying: return "もち子さん - 泣き"
+    case .mochikoSexy: return "もち子さん - セクシー／あん子"
     case .culSad: return "WhiteCUL - かなしい"
-    case .no7Announce: return "No.7 - アナウンス"
-    case .nurseRoboHorror: return "ナースロボT - 恐怖"
-    case .hanamaruWhisper: return "満別花丸 - ささやき"
-    case .zonkoStream: return "ぞん子 - 実況風"
+    case .no7Read: return "No.7 - 読み聞かせ"
+    case .nurseRoboNormal: return "ナースロボT - ノーマル"
+    case .zonkoNormal: return "ぞん子 - ノーマル"
     }
   }
 
@@ -69,6 +67,7 @@ protocol VoicevoxClientDelegate: AnyObject {
   func voicevoxClientDidStartFetching()
   func voicevoxClientDidStartPlaying()
   func voicevoxClientDidFinishPlaying()
+  func voicevoxClientDidThrowError()
 }
 
 class VoicevoxClient: NSObject {
@@ -79,6 +78,14 @@ class VoicevoxClient: NSObject {
   func speak(text: String, voiceStyle: VoicevoxStyle = VoicevoxStyle.random(),
              completion: @escaping (Error?) -> Void) {
     delegate?.voicevoxClientDidStartFetching()
+
+    if !isVoiceVoxAvailable() {
+      completion(NSError(domain: "VoicevoxClient", code: -3,
+                         userInfo: [NSLocalizedDescriptionKey: "No network connection"]))
+      delegate?.voicevoxClientDidThrowError()
+      return
+    }
+
     let speakerID = voiceStyle.rawValue
     // 1. Create /audio_query request
     var queryURL = baseURL.appendingPathComponent("audio_query")
@@ -133,11 +140,13 @@ class VoicevoxClient: NSObject {
               completion(nil)
             } catch {
               print("Audio playback error:", error)
+              self.delegate?.voicevoxClientDidThrowError()
               completion(error)
             }
           }
         } catch {
           print("Failed to save audio file:", error)
+          self.delegate?.voicevoxClientDidThrowError()
           completion(error)
         }
       }.resume()
@@ -153,6 +162,26 @@ class VoicevoxClient: NSObject {
 
   func isPlaying() -> Bool {
     audioPlayer?.isPlaying ?? false
+  }
+
+  func isVoiceVoxAvailable() -> Bool {
+    // Check if baseURL is reachable before proceeding
+    var request = URLRequest(url: baseURL)
+    request.httpMethod = "HEAD"
+
+    let semaphore = DispatchSemaphore(value: 0)
+    var isReachable = false
+
+    URLSession.shared.dataTask(with: request) { _, response, _ in
+      if let httpResponse = response as? HTTPURLResponse {
+        isReachable = (200 ... 405).contains(httpResponse.statusCode)
+      }
+      semaphore.signal()
+    }.resume()
+
+    _ = semaphore.wait(timeout: .now() + 2.0) // wait up to 2 seconds
+
+    return isReachable
   }
 }
 

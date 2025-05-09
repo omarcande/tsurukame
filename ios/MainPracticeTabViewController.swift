@@ -53,7 +53,7 @@ class MainPracticeTabViewController: UITableViewController {
     switch StoryboardSegue.Main(segue) {
     case .katakanaCharacterPractice:
       var items = [ReviewItem]()
-      for japanese in kAllKatakana {
+      for japanese in kAllKatakana.shuffled() {
         var subject = TKMSubject()
         subject.japanese = japanese
         subject.vocabulary = TKMVocabulary()
