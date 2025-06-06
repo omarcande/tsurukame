@@ -71,7 +71,9 @@ class ContextSentenceModelItem: AttributedModelItem {
     if voicevox.isPlaying() {
       voicevox.stopPlayback()
     } else {
-      voicevox.speak(text: japaneseText.string) { error in
+      let selectedID = UserDefaults.standard.integer(forKey: "SelectedVoicevoxStyle")
+      voicevox.speak(text: japaneseText.string,
+                     voiceStyleId: selectedID) { error in
         if let error = error {
           print("❌ Voicevox failed: \(error.localizedDescription)")
           if self.speechSynthesizer.isSpeaking {

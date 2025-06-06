@@ -16,6 +16,7 @@ import AVFoundation
 import Foundation
 
 enum VoicevoxStyle: Int, CaseIterable {
+  case randomVoice = -1
   case metanNormal = 2
   case zundamonTsundere = 7
   case tsumugi = 8
@@ -35,6 +36,7 @@ enum VoicevoxStyle: Int, CaseIterable {
 
   var displayName: String {
     switch self {
+    case .randomVoice: return "ランダム"
     case .metanNormal: return "四国めたん - ノーマル"
     case .zundamonTsundere: return "ずんだもん - ツンツン"
     case .tsumugi: return "春日部つむぎ - ノーマル"
@@ -59,7 +61,11 @@ enum VoicevoxStyle: Int, CaseIterable {
   }
 
   static func random() -> VoicevoxStyle {
-    allCases.randomElement()!
+    var style: VoicevoxStyle?
+    repeat {
+      style = allCases.randomElement()!
+    } while style == .randomVoice
+    return style!
   }
 }
 
@@ -77,6 +83,12 @@ class VoicevoxClient: NSObject {
 
   func speak(text: String, voiceStyle: VoicevoxStyle = VoicevoxStyle.random(),
              completion: @escaping (Error?) -> Void) {
+    let id = voiceStyle == .randomVoice ? VoicevoxStyle.random().rawValue : voiceStyle.rawValue
+    speak(text: text, voiceStyleId: id, completion: completion)
+  }
+
+  func speak(text: String, voiceStyleId: Int,
+             completion: @escaping (Error?) -> Void) {
     delegate?.voicevoxClientDidStartFetching()
 
     if !isVoiceVoxAvailable() {
@@ -86,7 +98,7 @@ class VoicevoxClient: NSObject {
       return
     }
 
-    let speakerID = voiceStyle.rawValue
+    let speakerID = voiceStyleId
     // 1. Create /audio_query request
     var queryURL = baseURL.appendingPathComponent("audio_query")
     queryURL =
@@ -135,7 +147,7 @@ class VoicevoxClient: NSObject {
               self.audioPlayer?.prepareToPlay()
               self.audioPlayer?.play()
               print("🎧 Playing: \(text)")
-              print("With Voice: \(voiceStyle.displayName)")
+              print("With Voice: \(speakerID)")
               self.delegate?.voicevoxClientDidStartPlaying()
               completion(nil)
             } catch {

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0752EF222DC2C27300754751 /* VoicevoxClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0752EF212DC2C25C00754751 /* VoicevoxClient.swift */; };
+		07E34B2C2DF36C7A0016499B /* VoicevoxVoiceSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E34B2B2DF36C6D0016499B /* VoicevoxVoiceSelectionView.swift */; };
 		0A943349E17FA7889EFEE41F /* Pods_Tsurukame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC80AAF9736A570E3C4CC09E /* Pods_Tsurukame.framework */; };
 		480B243123D6830300FC2A82 /* Rexy in Frameworks */ = {isa = PBXBuildFile; productRef = 480B243023D6830300FC2A82 /* Rexy */; };
 		481B2FED23C55AAF0041EF1F /* CurrentLevelReviewTimeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481B2FEC23C55AAF0041EF1F /* CurrentLevelReviewTimeItem.swift */; };
@@ -265,6 +266,7 @@
 
 /* Begin PBXFileReference section */
 		0752EF212DC2C25C00754751 /* VoicevoxClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicevoxClient.swift; sourceTree = "<group>"; };
+		07E34B2B2DF36C6D0016499B /* VoicevoxVoiceSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicevoxVoiceSelectionView.swift; sourceTree = "<group>"; };
 		10E5709643045C62AD6AC427 /* Pods_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		116070EC9485A78089387729 /* Pods-FontScreenshotterUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FontScreenshotterUITests.debug.xcconfig"; path = "Target Support Files/Pods-FontScreenshotterUITests/Pods-FontScreenshotterUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		1BBBD142815F6A55FA9D2C21 /* libPods-Tsurukame Complication Extension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tsurukame Complication Extension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -656,6 +658,7 @@
 				63E1386927E6C12500AC4706 /* SettingChoiceListViewController.swift */,
 				633632EE201F3490006D582B /* Settings.swift */,
 				639528EC25CC0688009845ED /* SettingsViewController.swift */,
+				07E34B2B2DF36C6D0016499B /* VoicevoxVoiceSelectionView.swift */,
 				C970BC0223D262CE001F3735 /* SiriShortcutHelper.swift */,
 				636A63E0238A2B8200902269 /* SRSStageCategoryItem.swift */,
 				63FCAE77237F75CC00DB1418 /* Style.swift */,
@@ -1425,6 +1428,7 @@
 				633632EF201F3490006D582B /* Settings.swift in Sources */,
 				63A16775253AD8AE00B5BCD6 /* FMDatabase+Assert.swift in Sources */,
 				637CA12C25D7EDFF0082580E /* ReviewSummaryViewController.swift in Sources */,
+				07E34B2C2DF36C7A0016499B /* VoicevoxVoiceSelectionView.swift in Sources */,
 				639E750427E9CFB3006E36EA /* GradientView.swift in Sources */,
 				63C74BC825C822C9004F6C99 /* SubjectModelItem.swift in Sources */,
 				638A5C6C25ADBB86001A7AEE /* main.swift in Sources */,
@@ -1790,7 +1794,7 @@
 				ENABLE_MODULE_VERIFIER = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1827,7 +1831,7 @@
 				ENABLE_MODULE_VERIFIER = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1969,6 +1973,7 @@
 				DEVELOPMENT_TEAM = 7B2GP77Y4A;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = FontScreenshotterUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1995,6 +2000,7 @@
 				DEVELOPMENT_TEAM = 7B2GP77Y4A;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = FontScreenshotterUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2022,6 +2028,7 @@
 				DEVELOPMENT_TEAM = 7B2GP77Y4A;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				INFOPLIST_FILE = Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2051,6 +2058,7 @@
 				DEVELOPMENT_TEAM = 7B2GP77Y4A;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				INFOPLIST_FILE = Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

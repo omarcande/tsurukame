@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import Foundation
+import SwiftUI
 import UIKit
 
 class SettingsViewController: UITableViewController, TKMViewController {
@@ -60,6 +61,12 @@ class SettingsViewController: UITableViewController, TKMViewController {
                              title: "Radicals, Kanji & Vocabulary",
                              accessoryType: .disclosureIndicator) { [unowned self] in
         self.perform(segue: StoryboardSegue.Settings.subjectDetailsSettings, sender: self)
+      })
+    model.add(BasicModelItem(style: .default,
+                             title: "Voicevox Voices",
+                             accessoryType: .disclosureIndicator) { [unowned self] in
+        let vc = UIHostingController(rootView: VoicevoxVoiceSelectionView())
+        self.navigationController?.pushViewController(vc, animated: true)
       })
 
     model.add(section: "Diagnostics")
