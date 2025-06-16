@@ -15,6 +15,7 @@
 import Accelerate
 import AVFoundation
 import Foundation
+import SwiftUI
 import WaniKaniAPI
 
 private let kBlurKernelSize: CGFloat = 19
@@ -63,8 +64,20 @@ class ContextSentenceModelItem: AttributedModelItem {
   func initReader() {
     rightButtonImage = Asset.baselineVolumeUpBlack24pt.image
     rightButtonCallback = { [unowned self] (_: AttributedModelCell) in
-      self.readContextSentence()
+      // self.readContextSentence()
+      self.presentAITutor(with: self.japaneseText.string)
     }
+  }
+
+  func presentAITutor(with sentence: String) {
+    guard let topVC = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?
+      .rootViewController else {
+      return
+    }
+    let hostingController =
+      UIHostingController(rootView: NavigationView { AITutorView(sentence: sentence) })
+    hostingController.modalPresentationStyle = .fullScreen
+    topVC.present(hostingController, animated: true, completion: nil)
   }
 
   @objc private func readContextSentence() {
@@ -72,6 +85,13 @@ class ContextSentenceModelItem: AttributedModelItem {
       voicevox.stopPlayback()
     } else {
       let selectedID = UserDefaults.standard.integer(forKey: "SelectedVoicevoxStyle")
+//      Task {
+//        do {
+//          try await self.aiTest(jpSentence: self.japaneseText.string)
+//        } catch {
+//          print("AI test failed: \(error.localizedDescription)")
+//        }
+//      }
       voicevox.speak(text: japaneseText.string,
                      voiceStyleId: selectedID) { error in
         if let error = error {
@@ -87,6 +107,62 @@ class ContextSentenceModelItem: AttributedModelItem {
       }
     }
   }
+
+//
+//  private func aiTest(jpSentence: String) async throws {
+//    let geminiAPIKey = "AIzaSyAzV5AOqaLXUrmGriL0jzx34y1E3FPGib0"
+//    guard let url =
+//      URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent?key=\(geminiAPIKey)")
+//    else {
+//      throw URLError(.badURL)
+//    }
+//
+//    let requestPayload: [String: Any] = [
+//      "contents": [
+//        ["parts": [["text": instructions + "\n\n" + jpSentence]]],
+//      ],
+//    ]
+//
+//    let jsonData = try JSONSerialization.data(withJSONObject: requestPayload)
+//    var request = URLRequest(url: url)
+//    request.httpMethod = "POST"
+//    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//    request.httpBody = jsonData
+//
+//    let (data, _) = try await URLSession.shared.data(for: request)
+//    struct GeminiResponse: Decodable {
+//      struct Candidate: Decodable {
+//        struct Content: Decodable {
+//          struct Part: Decodable {
+//            let text: String
+//          }
+//
+//          let parts: [Part]
+//        }
+//
+//        let content: Content
+//      }
+//
+//      let candidates: [Candidate]
+//    }
+//
+//    print("Raw response:", String(data: data, encoding: .utf8) ?? "nil or non-UTF8 data")
+//
+//    if let raw = String(data: data, encoding: .utf8) {
+//      print("🔎 Gemini raw response: \(raw)")
+//    }
+//
+//    do {
+//      let decoded = try JSONDecoder().decode(GeminiResponse.self, from: data)
+//      if let responseText = decoded.candidates.first?.content.parts.first?.text {
+//        print("Gemini AI response: \(responseText)")
+//      } else {
+//        print("Gemini API returned no usable content.")
+//      }
+//    } catch {
+//      print("❌ JSON decode failed:", error)
+//    }
+//  }
 
   override var cellFactory: TableModelCellFactory {
     .fromDefaultConstructor(cellClass: ContextSentenceModelCell.self)
