@@ -200,6 +200,11 @@
 		E881943B2A6BC0CF002C2E1C /* ArtworkModelItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E881943A2A6BC0CF002C2E1C /* ArtworkModelItem.swift */; };
 		E881943F2A6BC38A002C2E1C /* ArtworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E881943E2A6BC38A002C2E1C /* ArtworkManager.swift */; };
 		EC6A5487F6875EC64C63B6B2 /* Pods_FontScreenshotter_FontScreenshotterUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 404461BC39B4A19B128F9E69 /* Pods_FontScreenshotter_FontScreenshotterUITests.framework */; };
+		D90846B9237F1C790068A272 /* ReviewWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D90846B8237F1C790068A272 /* ReviewWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D90846B4237F1C790068A273 /* ReviewWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90846B4237F1C790068A270 /* ReviewWidget.swift */; };
+		D90846B4237F1C790068A274 /* ReviewWidgetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90846B4237F1C790068A271 /* ReviewWidgetProvider.swift */; };
+		D90846B4237F1C790068A275 /* ReviewWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90846B4237F1C790068A272 /* ReviewWidgetView.swift */; };
+		D90846B4237F1C790068A277 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D90846B4237F1C790068A276 /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -238,6 +243,13 @@
 			remoteGlobalIDString = C90846AB237F1C770068A272;
 			remoteInfo = "Tsurukame Complication";
 		};
+		D90846BA237F1C790068A272 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 630FD60B1FC45BDF00D21C1F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D90846B7237F1C790068A272;
+			remoteInfo = "ReviewWidget";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -259,6 +271,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				C90846B9237F1C790068A272 /* Tsurukame Complication Extension.appex in Embed Foundation Extensions */,
+				D90846B9237F1C790068A272 /* ReviewWidget.appex in Embed App Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -467,6 +480,12 @@
 		E881943E2A6BC38A002C2E1C /* ArtworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtworkManager.swift; sourceTree = "<group>"; };
 		F33812F134DC80E5D981C40E /* Pods_FontScreenshotter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FontScreenshotter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC80AAF9736A570E3C4CC09E /* Pods_Tsurukame.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tsurukame.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D90846B8237F1C790068A272 /* ReviewWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ReviewWidget.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D90846B4237F1C790068A270 /* ReviewWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewWidget/ReviewWidget.swift; sourceTree = "<group>"; };
+		D90846B4237F1C790068A271 /* ReviewWidgetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewWidget/ReviewWidgetProvider.swift; sourceTree = "<group>"; };
+		D90846B4237F1C790068A272 /* ReviewWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewWidget/ReviewWidgetView.swift; sourceTree = "<group>"; };
+		D90846B4237F1C790068A276 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ReviewWidget/Info.plist; sourceTree = "<group>"; };
+		D90846B4237F1C790068A278 /* ReviewWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ReviewWidget/ReviewWidget.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -526,6 +545,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C90846B5237F1C790068A272 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D90846B5237F1C790068A272 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -690,7 +716,19 @@
 				636A63E3238A5D6B00902269 /* VacationModeView.xib */,
 				633AFAE52352B6F2004F732F /* VocabularyHighlighter.swift */,
 				C92AB96E237F280300F79904 /* WatchHelper.swift */,
+				D90846B7237F1C790068A273 /* ReviewWidget */,
 			);
+			sourceTree = "<group>";
+		};
+		D90846B7237F1C790068A273 /* ReviewWidget */ = {
+			isa = PBXGroup;
+			children = (
+				D90846B4237F1C790068A270 /* ReviewWidget.swift */,
+				D90846B4237F1C790068A271 /* ReviewWidgetProvider.swift */,
+				D90846B4237F1C790068A272 /* ReviewWidgetView.swift */,
+				D90846B4237F1C790068A276 /* Info.plist */,
+			);
+			path = ReviewWidget;
 			sourceTree = "<group>";
 		};
 		63344E7F2D291C9F002A4FED /* BuildConfigs */ = {
@@ -1014,6 +1052,23 @@
 			productReference = C90846B8237F1C790068A272 /* Tsurukame Complication Extension.appex */;
 			productType = "com.apple.product-type.watchkit2-extension";
 		};
+		D90846B7237F1C790068A272 /* ReviewWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D90846CF237F1C790068A272 /* Build configuration list for PBXNativeTarget "ReviewWidget" */;
+			buildPhases = (
+				D90846B4237F1C790068A272 /* Sources */,
+				D90846B5237F1C790068A272 /* Frameworks */,
+				D90846B6237F1C790068A272 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ReviewWidget;
+			productName = ReviewWidget;
+			productReference = D90846B8237F1C790068A272 /* ReviewWidget.appex */;
+			productType = "com.apple.product-type.widgetkit-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1088,6 +1143,7 @@
 				63C42A3521B6A290008CA938 /* FontScreenshotterUITests */,
 				C90846AB237F1C770068A272 /* Tsurukame Complication */,
 				C90846B7237F1C790068A272 /* Tsurukame Complication Extension */,
+				D90846B7237F1C790068A272 /* ReviewWidget */,
 				6335B46123CF0C820071671E /* AppStoreScreenshots */,
 			);
 		};
@@ -1184,6 +1240,14 @@
 			files = (
 				63A711E72BBBF87B0047436A /* PrivacyInfo.xcprivacy in Resources */,
 				C90846C4237F1C790068A272 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D90846B6237F1C790068A272 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D90846B4237F1C790068A277 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1597,6 +1661,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D90846B4237F1C790068A272 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D90846B4237F1C790068A273 /* ReviewWidget.swift in Sources */,
+				D90846B4237F1C790068A274 /* ReviewWidgetProvider.swift in Sources */,
+				D90846B4237F1C790068A275 /* ReviewWidgetView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1631,6 +1705,11 @@
 			platformFilter = ios;
 			target = C90846AB237F1C770068A272 /* Tsurukame Complication */;
 			targetProxy = C90846C6237F1C790068A272 /* PBXContainerItemProxy */;
+		};
+		D90846BB237F1C790068A272 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D90846B7237F1C790068A272 /* ReviewWidget */;
+			targetProxy = D90846BA237F1C790068A272 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2196,6 +2275,66 @@
 			};
 			name = Release;
 		};
+		D90846CD237F1C790068A272 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1114;
+				DEVELOPMENT_TEAM = RMRGTD28A8;
+				CODE_SIGN_ENTITLEMENTS = ReviewWidget/ReviewWidget.entitlements;
+				INFOPLIST_FILE = ReviewWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.18;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = app.hanaso.tsurukame.ReviewWidget;
+				PRODUCT_NAME = "ReviewWidget";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D90846CE237F1C790068A272 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1114;
+				DEVELOPMENT_TEAM = 7B2GP77Y4A;
+				CODE_SIGN_ENTITLEMENTS = ReviewWidget/ReviewWidget.entitlements;
+				INFOPLIST_FILE = ReviewWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.18;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = app.hanaso.tsurukame.ReviewWidget;
+				PRODUCT_NAME = "ReviewWidget";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2267,6 +2406,15 @@
 			buildConfigurations = (
 				C90846CA237F1C790068A272 /* Debug */,
 				C90846CB237F1C790068A272 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D90846CF237F1C790068A272 /* Build configuration list for PBXNativeTarget "ReviewWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D90846CD237F1C790068A272 /* Debug */,
+				D90846CE237F1C790068A272 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

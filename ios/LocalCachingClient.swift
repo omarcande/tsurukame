@@ -219,6 +219,9 @@ class LocalCachingClient: NSObject, SubjectLevelGetter {
   }
 
   class func databaseUrl() -> URL {
+    if let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.app.hanaso.tsurukame") {
+      return url.appendingPathComponent("local-cache.db")
+    }
     let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
     return URL(fileURLWithPath: "\(paths[0])/local-cache.db")
   }
