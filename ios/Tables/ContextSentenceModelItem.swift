@@ -67,6 +67,9 @@ class ContextSentenceModelItem: AttributedModelItem {
       // self.readContextSentence()
       self.presentAITutor(with: self.japaneseText.string)
     }
+    rightButtonLongPressCallback = { [unowned self] (_: AttributedModelCell) in
+      self.presentAITutor(with: japaneseText.string)
+    }
   }
 
   func presentAITutor(with sentence: String) {

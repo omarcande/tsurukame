@@ -38,10 +38,10 @@ struct AITutorView: View {
             Text(sentence)
               .font(.title2) // Slightly larger font for the main sentence
               .fontWeight(.semibold)
-              .foregroundColor(.black) // Clear, dark text for the sentence
+//              .foregroundColor(.black) // Clear, dark text for the sentence
           }
           .padding() // Padding around this section
-          .background(Color.white) // White background for the section
+          .background(Color(customBackgroundColor)) // White background for the section
           .cornerRadius(10) // Slightly rounded corners for the section box
           .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0,
                   y: 2) // Subtle shadow
@@ -60,10 +60,10 @@ struct AITutorView: View {
                 .foregroundColor(.gray) // Gray label
               Text(convertToAttributedString(response))
                 .font(.body) // Standard body font for the response
-                .foregroundColor(.black) // Dark text for the response
+//                .foregroundColor(.black) // Dark text for the response
             }
             .padding() // Padding around this section
-            .background(Color.white) // White background for the section
+            .background(Color(customBackgroundColor)) // White background for the section
             .cornerRadius(10) // Slightly rounded corners
             .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0,
                     y: 2) // Subtle shadow
@@ -103,6 +103,14 @@ struct AITutorView: View {
     }
   }
 
+  let customBackgroundColor = UIColor { traitCollection in
+    if traitCollection.userInterfaceStyle == .dark {
+      return UIColor(red: 28 / 255, green: 28 / 255, blue: 30 / 255, alpha: 1) // #1C1C1E
+    } else {
+      return .white
+    }
+  }
+
   // Helper function to convert a Markdown string to AttributedString
   private func convertToAttributedString(_ markdownString: String) -> AttributedString {
     do {
@@ -128,9 +136,7 @@ class AITutorViewModel: ObservableObject {
   let generalInstructions = """
   You are a Japanese language tutor.
 
-  When you receive a sentence written in Japanese, you will translate the sentence to English and provide a detailed analysis of the grammar of the sentence. You will divide your response in 3 sections: Translation | Breakdown and Explanation | Overall Meaning and Nuances
-
-  When writing your response, format it in Markdown format.
+  When you receive a sentence written in Japanese, you will translate the sentence to English and provide a detailed analysis of the grammar of the sentence. You will divide your response in 4 sections: Hiragana & Romanji | Translation | Breakdown and Explanation | Overall Meaning and Nuances
   """
 
   // Example user input for the few-shot example
@@ -140,7 +146,9 @@ class AITutorViewModel: ObservableObject {
 
   // Example AI response for the few-shot example
   let exampleAIResponse = """
-  Let's break down the sentence: **このリストには、あなたの氏名も入ってます。**
+
+    **Hiragana:** このリストには、あなたのしめいもはいってます。
+    **Romanji:** Kono risuto ni wa, anata no shimei mo haittemasu.
 
   **Translation:**
 
