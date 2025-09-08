@@ -200,7 +200,7 @@ class AITutorViewModel: ObservableObject {
 
     // Changed endpoint from :streamGenerateContent to :generateContent
     guard let url =
-      URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent?key=\(geminiAPIKey)")
+      URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=\(geminiAPIKey)")
     else {
       throw URLError(.badURL)
     }
