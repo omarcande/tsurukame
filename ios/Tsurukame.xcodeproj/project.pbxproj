@@ -546,12 +546,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				076890542E70717000FD5F35 /* UIKit.framework in Frameworks */,
-				076890062E706A6200FD5F35 /* FMDB.framework in Frameworks */,
-				07688F712E6FB20600FD5F35 /* Reachability.framework in Frameworks */,
 				07688F532E6FB04000FD5F35 /* SwiftUI.framework in Frameworks */,
 				07688F512E6FB04000FD5F35 /* WidgetKit.framework in Frameworks */,
-				07688F732E6FB22200FD5F35 /* WaniKaniAPI in Frameworks */,
 				71425A254A5C6DFCDDEF7A82 /* Pods_ReviewWidgetExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1567,11 +1563,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				076890362E706F0F00FD5F35 /* CommonErrors.swift in Sources */,
-				076890252E706C0E00FD5F35 /* RecentMistakeHandler.swift in Sources */,
-				076890042E7069A200FD5F35 /* LocalCachingClient.swift in Sources */,
-				076890352E706EFB00FD5F35 /* Settings.swift in Sources */,
-				076890342E706EEF00FD5F35 /* FMDatabase+Assert.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
