@@ -15,13 +15,10 @@
 import Foundation
 import UIKit
 import WaniKaniAPI
-import BackgroundTasks
-import WidgetKit
 
 // The maximum number of local notifications you can add to a NotificationCenter before it starts
 // removing old ones.
 private let kMaxLocalNotifications = 64
-private let kRefreshReviewWidgetTaskIdentifier = "app.hanaso.tsurukame.refreshReviewWidget"
 
 class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelegate {
   var window: UIWindow?
@@ -52,10 +49,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelega
       setMainViewControllerAnimated(animated: false, clearUserData: false)
     } else {
       pushLoginViewController()
-    }
-
-    BGTaskScheduler.shared.register(forTaskWithIdentifier: kRefreshReviewWidgetTaskIdentifier, using: nil) { task in
-      self.handleAppRefresh(task: task as! BGAppRefreshTask)
     }
 
     return true
@@ -179,10 +172,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelega
     updateAppBadgeCount()
   }
 
-  func applicationDidEnterBackground(_ application: UIApplication) {
-    scheduleAppRefresh()
-  }
-
   func application(_: UIApplication,
                    performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult)
                      -> Void) {
@@ -283,68 +272,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelega
     let vc = StoryboardScene.SubjectDetails.initialScene.instantiate()
     vc.setup(services: services, subject: subject, showHints: true)
     navigationController.pushViewController(vc, animated: true)
-  }
-
-  // MARK: - Background Tasks
-
-  private func scheduleAppRefresh() {
-    let request = BGAppRefreshTaskRequest(identifier: kRefreshReviewWidgetTaskIdentifier)
-    request.earliestBeginDate = Date(timeIntervalSinceNow: 15 * 60) // Fetch no earlier than 15 minutes from now
-
-    do {
-      try BGTaskScheduler.shared.submit(request)
-    } catch {
-      print("Could not schedule app refresh: \(error)")
-    }
-  }
-
-  private func handleAppRefresh(task: BGAppRefreshTask) {
-    scheduleAppRefresh()
-
-    let queue = OperationQueue()
-    queue.maxConcurrentOperationCount = 1
-
-    task.expirationHandler = {
-      queue.cancelAllOperations()
-    }
-
-    let operation = BlockOperation {
-      guard let lcc = self.services.localCachingClient else {
-        task.setTaskCompleted(success: false)
-        return
-      }
-
-      let assignments = lcc.getAllAssignments().filter { $0.isReviewStage }
-      guard let assignment = assignments.randomElement(),
-            let subject = lcc.getSubject(id: assignment.subjectID) else {
-        task.setTaskCompleted(success: true)
-        return
-      }
-
-      let primaryMeaning = subject.meanings.first(where: { $0.type == .primary })?.meaning ?? ""
-      let primaryReading = subject.readings.first(where: { $0.isPrimary })?.reading ?? ""
-
-      let sharedReviewItem = SharedReviewItem(japanese: subject.japanese,
-                                              reading: primaryReading,
-                                              meaning: primaryMeaning)
-
-      let fileManager = FileManager.default
-      if let url = fileManager.containerURL(forSecurityApplicationGroupIdentifier: "group.app.hanaso.tsurukame") {
-        let fileURL = url.appendingPathComponent("latest_review.json")
-        do {
-          let data = try JSONEncoder().encode(sharedReviewItem)
-          try data.write(to: fileURL)
-          WidgetCenter.shared.reloadTimelines(ofKind: "ReviewWidget")
-          task.setTaskCompleted(success: true)
-        } catch {
-          task.setTaskCompleted(success: false)
-        }
-      } else {
-        task.setTaskCompleted(success: false)
-      }
-    }
-
-    queue.addOperation(operation)
   }
 
   func handleApplink(url: URL) -> Bool {
