@@ -36,7 +36,7 @@ target 'Tsurukame' do
   end
 end
 
-target 'ReviewWidget' do
+target 'ReviewWidgetExtension' do
   use_frameworks!
   pod 'Reachability', '~> 3.2'
 end
