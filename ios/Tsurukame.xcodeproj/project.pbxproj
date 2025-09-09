@@ -509,12 +509,20 @@
 			);
 			target = 07688F4E2E6FB03F00FD5F35 /* ReviewWidgetExtension */;
 		};
+		07688FE72E70589F00FD5F35 /* Exceptions for "ReviewWidget" folder in "Tsurukame" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SharedReviewItem.swift,
+			);
+			target = 630FD6121FC45BDF00D21C1F /* Tsurukame */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		07688F542E6FB04000FD5F35 /* ReviewWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				07688FE72E70589F00FD5F35 /* Exceptions for "ReviewWidget" folder in "Tsurukame" target */,
 				07688F692E6FB04200FD5F35 /* Exceptions for "ReviewWidget" folder in "ReviewWidgetExtension" target */,
 			);
 			path = ReviewWidget;
