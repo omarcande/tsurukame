@@ -3,17 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		071E07052DFB672E0045238D /* AITutorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 071E07042DFB672A0045238D /* AITutorView.swift */; };
 		0752EF222DC2C27300754751 /* VoicevoxClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0752EF212DC2C25C00754751 /* VoicevoxClient.swift */; };
-		07688F512E6FB04000FD5F35 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07688F502E6FB04000FD5F35 /* WidgetKit.framework */; };
-		07688F532E6FB04000FD5F35 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07688F522E6FB04000FD5F35 /* SwiftUI.framework */; };
-		07688F642E6FB04200FD5F35 /* ReviewWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 07688F4F2E6FB04000FD5F35 /* ReviewWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		07688F712E6FB20600FD5F35 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07688F702E6FB20600FD5F35 /* Reachability.framework */; };
-		07688F732E6FB22200FD5F35 /* WaniKaniAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 07688F722E6FB22200FD5F35 /* WaniKaniAPI */; };
 		07E34B2C2DF36C7A0016499B /* VoicevoxVoiceSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E34B2B2DF36C6D0016499B /* VoicevoxVoiceSelectionView.swift */; };
 		0A943349E17FA7889EFEE41F /* Pods_Tsurukame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC80AAF9736A570E3C4CC09E /* Pods_Tsurukame.framework */; };
 		480B243123D6830300FC2A82 /* Rexy in Frameworks */ = {isa = PBXBuildFile; productRef = 480B243023D6830300FC2A82 /* Rexy */; };
@@ -208,13 +203,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		07688F622E6FB04200FD5F35 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 630FD60B1FC45BDF00D21C1F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 07688F4E2E6FB03F00FD5F35;
-			remoteInfo = ReviewWidgetExtension;
-		};
 		6335B46723CF0C820071671E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 630FD60B1FC45BDF00D21C1F /* Project object */;
@@ -253,17 +241,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		07688F662E6FB04200FD5F35 /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				07688F642E6FB04200FD5F35 /* ReviewWidgetExtension.appex in Embed Foundation Extensions */,
-			);
-			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		C90846C9237F1C790068A272 /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -291,11 +268,6 @@
 /* Begin PBXFileReference section */
 		071E07042DFB672A0045238D /* AITutorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITutorView.swift; sourceTree = "<group>"; };
 		0752EF212DC2C25C00754751 /* VoicevoxClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicevoxClient.swift; sourceTree = "<group>"; };
-		07688F4F2E6FB04000FD5F35 /* ReviewWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ReviewWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		07688F502E6FB04000FD5F35 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
-		07688F522E6FB04000FD5F35 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		07688F652E6FB04200FD5F35 /* ReviewWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ReviewWidgetExtension.entitlements; sourceTree = "<group>"; };
-		07688F702E6FB20600FD5F35 /* Reachability.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Reachability.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		07E34B2B2DF36C6D0016499B /* VoicevoxVoiceSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicevoxVoiceSelectionView.swift; sourceTree = "<group>"; };
 		10E5709643045C62AD6AC427 /* Pods_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		116070EC9485A78089387729 /* Pods-FontScreenshotterUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FontScreenshotterUITests.debug.xcconfig"; path = "Target Support Files/Pods-FontScreenshotterUITests/Pods-FontScreenshotterUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -497,32 +469,7 @@
 		FC80AAF9736A570E3C4CC09E /* Pods_Tsurukame.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tsurukame.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		07688F692E6FB04200FD5F35 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 07688F4E2E6FB03F00FD5F35 /* ReviewWidgetExtension */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		07688F542E6FB04000FD5F35 /* ReviewWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (07688F692E6FB04200FD5F35 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ReviewWidget; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
-		07688F4C2E6FB03F00FD5F35 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				07688F712E6FB20600FD5F35 /* Reachability.framework in Frameworks */,
-				07688F532E6FB04000FD5F35 /* SwiftUI.framework in Frameworks */,
-				07688F512E6FB04000FD5F35 /* WidgetKit.framework in Frameworks */,
-				07688F732E6FB22200FD5F35 /* WaniKaniAPI in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		630FD6101FC45BDF00D21C1F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -651,7 +598,6 @@
 		630FD60A1FC45BDF00D21C1F = {
 			isa = PBXGroup;
 			children = (
-				07688F652E6FB04200FD5F35 /* ReviewWidgetExtension.entitlements */,
 				631CAD62234AD5FC008CEA73 /* AnswerChecker.swift */,
 				C904455C2395DBAE001BC48B /* AnswerTextField.swift */,
 				638A5C4D25A471F9001A7AEE /* AppDelegate.swift */,
@@ -676,7 +622,6 @@
 				4874562C261DD28E00F33AA3 /* FontScreenshotterUITests */,
 				63C42A3621B6A290008CA938 /* FontScreenshotterUITests.xctest */,
 				63CBFF28277327920086BA5F /* FontsViewController.swift */,
-				07688F542E6FB04000FD5F35 /* ReviewWidget */,
 				63CAAB0F1FD7FAC500E09DA1 /* Frameworks */,
 				63E1386727E59F4100AC4706 /* FullRefreshOverlayView.swift */,
 				63A5598627E5947300E7BBCB /* FullRefreshOverlayView.xib */,
@@ -745,7 +690,6 @@
 				636A63E3238A5D6B00902269 /* VacationModeView.xib */,
 				633AFAE52352B6F2004F732F /* VocabularyHighlighter.swift */,
 				C92AB96E237F280300F79904 /* WatchHelper.swift */,
-				07688F4F2E6FB04000FD5F35 /* ReviewWidgetExtension.appex */,
 			);
 			sourceTree = "<group>";
 		};
@@ -845,7 +789,6 @@
 		63CAAB0F1FD7FAC500E09DA1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				07688F702E6FB20600FD5F35 /* Reachability.framework */,
 				63391B5E2779BF56005CDA72 /* LessonSettingsViewController.swift */,
 				6364A10A242DFB6F000ABF32 /* Intents.framework */,
 				6356E7821FDFF0E3009CE7C1 /* WebKit.framework */,
@@ -856,8 +799,6 @@
 				404461BC39B4A19B128F9E69 /* Pods_FontScreenshotter_FontScreenshotterUITests.framework */,
 				10E5709643045C62AD6AC427 /* Pods_Tests.framework */,
 				FC80AAF9736A570E3C4CC09E /* Pods_Tsurukame.framework */,
-				07688F502E6FB04000FD5F35 /* WidgetKit.framework */,
-				07688F522E6FB04000FD5F35 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -924,29 +865,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		07688F4E2E6FB03F00FD5F35 /* ReviewWidgetExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 07688F6A2E6FB04200FD5F35 /* Build configuration list for PBXNativeTarget "ReviewWidgetExtension" */;
-			buildPhases = (
-				07688F4B2E6FB03F00FD5F35 /* Sources */,
-				07688F4C2E6FB03F00FD5F35 /* Frameworks */,
-				07688F4D2E6FB03F00FD5F35 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				07688F542E6FB04000FD5F35 /* ReviewWidget */,
-			);
-			name = ReviewWidgetExtension;
-			packageProductDependencies = (
-				07688F722E6FB22200FD5F35 /* WaniKaniAPI */,
-			);
-			productName = ReviewWidgetExtension;
-			productReference = 07688F4F2E6FB04000FD5F35 /* ReviewWidgetExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		630FD6121FC45BDF00D21C1F /* Tsurukame */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 630FD6291FC45BDF00D21C1F /* Build configuration list for PBXNativeTarget "Tsurukame" */;
@@ -960,14 +878,12 @@
 				630FD6111FC45BDF00D21C1F /* Resources */,
 				C90846C9237F1C790068A272 /* Embed Watch Content */,
 				0C9C13E732A68C21AE8F0AA3 /* [CP] Embed Pods Frameworks */,
-				07688F662E6FB04200FD5F35 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				63EF56FD26060BE50038551A /* PBXTargetDependency */,
 				C90846C7237F1C790068A272 /* PBXTargetDependency */,
-				07688F632E6FB04200FD5F35 /* PBXTargetDependency */,
 			);
 			name = Tsurukame;
 			packageProductDependencies = (
@@ -1105,13 +1021,10 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 1610;
 				ORGANIZATIONNAME = "David Sansome";
 				TargetAttributes = {
-					07688F4E2E6FB03F00FD5F35 = {
-						CreatedOnToolsVersion = 16.2;
-					};
 					630FD6121FC45BDF00D21C1F = {
 						CreatedOnToolsVersion = 9.1;
 						LastSwiftMigration = 0920;
@@ -1176,19 +1089,11 @@
 				C90846AB237F1C770068A272 /* Tsurukame Complication */,
 				C90846B7237F1C790068A272 /* Tsurukame Complication Extension */,
 				6335B46123CF0C820071671E /* AppStoreScreenshots */,
-				07688F4E2E6FB03F00FD5F35 /* ReviewWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		07688F4D2E6FB03F00FD5F35 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		630FD6111FC45BDF00D21C1F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1516,13 +1421,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		07688F4B2E6FB03F00FD5F35 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		630FD60F1FC45BDF00D21C1F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1702,11 +1600,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		07688F632E6FB04200FD5F35 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 07688F4E2E6FB03F00FD5F35 /* ReviewWidgetExtension */;
-			targetProxy = 07688F622E6FB04200FD5F35 /* PBXContainerItemProxy */;
-		};
 		6335B46823CF0C820071671E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 630FD6121FC45BDF00D21C1F /* Tsurukame */;
@@ -1761,83 +1654,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		07688F672E6FB04200FD5F35 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_ENTITLEMENTS = ReviewWidgetExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = RMRGTD28A8;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ReviewWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ReviewWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 David Sansome. All rights reserved.";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = app.hanaso.tsurukame.ReviewWidget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		07688F682E6FB04200FD5F35 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_ENTITLEMENTS = ReviewWidgetExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = RMRGTD28A8;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ReviewWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ReviewWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 David Sansome. All rights reserved.";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = app.hanaso.tsurukame.ReviewWidget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		630FD6271FC45BDF00D21C1F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2383,15 +2199,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		07688F6A2E6FB04200FD5F35 /* Build configuration list for PBXNativeTarget "ReviewWidgetExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				07688F672E6FB04200FD5F35 /* Debug */,
-				07688F682E6FB04200FD5F35 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		630FD60E1FC45BDF00D21C1F /* Build configuration list for PBXProject "Tsurukame" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2509,11 +2316,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		07688F722E6FB22200FD5F35 /* WaniKaniAPI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 63A702132C2920D500AB0504 /* XCLocalSwiftPackageReference "WaniKaniAPI" */;
-			productName = WaniKaniAPI;
-		};
 		480B243023D6830300FC2A82 /* Rexy */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 480B242F23D6830300FC2A82 /* XCRemoteSwiftPackageReference "Rexy" */;
