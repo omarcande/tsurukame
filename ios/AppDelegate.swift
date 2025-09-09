@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import BackgroundTasks
 import Foundation
 import UIKit
 import WaniKaniAPI
+import BackgroundTasks
 import WidgetKit
 
 // The maximum number of local notifications you can add to a NotificationCenter before it starts
@@ -54,8 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelega
       pushLoginViewController()
     }
 
-    BGTaskScheduler.shared.register(forTaskWithIdentifier: kRefreshReviewWidgetTaskIdentifier,
-                                    using: nil) { task in
+    BGTaskScheduler.shared.register(forTaskWithIdentifier: kRefreshReviewWidgetTaskIdentifier, using: nil) { task in
       self.handleAppRefresh(task: task as! BGAppRefreshTask)
     }
 
@@ -180,7 +179,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelega
     updateAppBadgeCount()
   }
 
-  func applicationDidEnterBackground(_: UIApplication) {
+  func applicationDidEnterBackground(_ application: UIApplication) {
     ReviewWidgetDataUpdater.shared.updateReviewItem()
     scheduleAppRefresh()
   }
@@ -291,9 +290,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelega
 
   private func scheduleAppRefresh() {
     let request = BGAppRefreshTaskRequest(identifier: kRefreshReviewWidgetTaskIdentifier)
-    request
-      .earliestBeginDate =
-      Date(timeIntervalSinceNow: 15 * 60) // Fetch no earlier than 15 minutes from now
+    request.earliestBeginDate = Date(timeIntervalSinceNow: 15 * 60) // Fetch no earlier than 15 minutes from now
 
     do {
       try BGTaskScheduler.shared.submit(request)
@@ -333,8 +330,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelega
                                               meaning: primaryMeaning)
 
       let fileManager = FileManager.default
-      if let url = fileManager
-        .containerURL(forSecurityApplicationGroupIdentifier: "group.app.hanaso.tsurukame") {
+      if let url = fileManager.containerURL(forSecurityApplicationGroupIdentifier: "group.app.hanaso.tsurukame") {
         let fileURL = url.appendingPathComponent("latest_review.json")
         do {
           let data = try JSONEncoder().encode(sharedReviewItem)
