@@ -14,6 +14,14 @@
 		07688F642E6FB04200FD5F35 /* ReviewWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 07688F4F2E6FB04000FD5F35 /* ReviewWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		07688F712E6FB20600FD5F35 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07688F702E6FB20600FD5F35 /* Reachability.framework */; };
 		07688F732E6FB22200FD5F35 /* WaniKaniAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 07688F722E6FB22200FD5F35 /* WaniKaniAPI */; };
+		076890042E7069A200FD5F35 /* LocalCachingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A16785253AD8D200B5BCD6 /* LocalCachingClient.swift */; };
+		076890062E706A6200FD5F35 /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076890052E706A6200FD5F35 /* FMDB.framework */; };
+		076890082E706A8200FD5F35 /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076890072E706A8200FD5F35 /* FMDB.framework */; };
+		076890252E706C0E00FD5F35 /* RecentMistakeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791B8B5D2D6584C9000C8142 /* RecentMistakeHandler.swift */; };
+		076890342E706EEF00FD5F35 /* FMDatabase+Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A16770253AD8AD00B5BCD6 /* FMDatabase+Assert.swift */; };
+		076890352E706EFB00FD5F35 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633632EE201F3490006D582B /* Settings.swift */; };
+		076890362E706F0F00FD5F35 /* CommonErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791B8B5B2D657E2A000C8142 /* CommonErrors.swift */; };
+		076890542E70717000FD5F35 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076890532E70717000FD5F35 /* UIKit.framework */; };
 		07E34B2C2DF36C7A0016499B /* VoicevoxVoiceSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E34B2B2DF36C6D0016499B /* VoicevoxVoiceSelectionView.swift */; };
 		0A943349E17FA7889EFEE41F /* Pods_Tsurukame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC80AAF9736A570E3C4CC09E /* Pods_Tsurukame.framework */; };
 		480B243123D6830300FC2A82 /* Rexy in Frameworks */ = {isa = PBXBuildFile; productRef = 480B243023D6830300FC2A82 /* Rexy */; };
@@ -297,6 +305,9 @@
 		07688F522E6FB04000FD5F35 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		07688F652E6FB04200FD5F35 /* ReviewWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ReviewWidgetExtension.entitlements; sourceTree = "<group>"; };
 		07688F702E6FB20600FD5F35 /* Reachability.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Reachability.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		076890052E706A6200FD5F35 /* FMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		076890072E706A8200FD5F35 /* FMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		076890532E70717000FD5F35 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		07E34B2B2DF36C6D0016499B /* VoicevoxVoiceSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicevoxVoiceSelectionView.swift; sourceTree = "<group>"; };
 		10E5709643045C62AD6AC427 /* Pods_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		116070EC9485A78089387729 /* Pods-FontScreenshotterUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FontScreenshotterUITests.debug.xcconfig"; path = "Target Support Files/Pods-FontScreenshotterUITests/Pods-FontScreenshotterUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -535,6 +546,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				076890542E70717000FD5F35 /* UIKit.framework in Frameworks */,
+				076890062E706A6200FD5F35 /* FMDB.framework in Frameworks */,
 				07688F712E6FB20600FD5F35 /* Reachability.framework in Frameworks */,
 				07688F532E6FB04000FD5F35 /* SwiftUI.framework in Frameworks */,
 				07688F512E6FB04000FD5F35 /* WidgetKit.framework in Frameworks */,
@@ -547,6 +560,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				076890082E706A8200FD5F35 /* FMDB.framework in Frameworks */,
 				63A702152C2920D500AB0504 /* WaniKaniAPI in Frameworks */,
 				63EF56DE26060B980038551A /* WaniKaniAPI in Frameworks */,
 				637E636E242E137C00F0B5CA /* Intents.framework in Frameworks */,
@@ -865,6 +879,9 @@
 		63CAAB0F1FD7FAC500E09DA1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				076890532E70717000FD5F35 /* UIKit.framework */,
+				076890072E706A8200FD5F35 /* FMDB.framework */,
+				076890052E706A6200FD5F35 /* FMDB.framework */,
 				07688F702E6FB20600FD5F35 /* Reachability.framework */,
 				63391B5E2779BF56005CDA72 /* LessonSettingsViewController.swift */,
 				6364A10A242DFB6F000ABF32 /* Intents.framework */,
@@ -1550,6 +1567,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				076890362E706F0F00FD5F35 /* CommonErrors.swift in Sources */,
+				076890252E706C0E00FD5F35 /* RecentMistakeHandler.swift in Sources */,
+				076890042E7069A200FD5F35 /* LocalCachingClient.swift in Sources */,
+				076890352E706EFB00FD5F35 /* Settings.swift in Sources */,
+				076890342E706EEF00FD5F35 /* FMDatabase+Assert.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

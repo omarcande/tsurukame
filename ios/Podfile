@@ -39,6 +39,7 @@ end
 target 'ReviewWidgetExtension' do
   use_frameworks!
   pod 'Reachability', '~> 3.2'
+  pod 'FMDB', '~> 2.7.5'
 end
 
 # Delete the IPHONEOS_DEPLOYMENT_TARGET config setting so it inherits the
