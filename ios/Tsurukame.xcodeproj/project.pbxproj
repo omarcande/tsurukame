@@ -8,20 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		071E07052DFB672E0045238D /* AITutorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 071E07042DFB672A0045238D /* AITutorView.swift */; };
+		0725470A2E70865E004DD2B6 /* WaniKaniAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 07688F722E6FB22200FD5F35 /* WaniKaniAPI */; };
+		0725471A2E70869F004DD2B6 /* ReviewWidgetDataUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072547192E70869F004DD2B6 /* ReviewWidgetDataUpdater.swift */; };
 		0752EF222DC2C27300754751 /* VoicevoxClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0752EF212DC2C25C00754751 /* VoicevoxClient.swift */; };
 		07688F512E6FB04000FD5F35 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07688F502E6FB04000FD5F35 /* WidgetKit.framework */; };
 		07688F532E6FB04000FD5F35 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07688F522E6FB04000FD5F35 /* SwiftUI.framework */; };
 		07688F642E6FB04200FD5F35 /* ReviewWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 07688F4F2E6FB04000FD5F35 /* ReviewWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		07688F712E6FB20600FD5F35 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07688F702E6FB20600FD5F35 /* Reachability.framework */; };
-		07688F732E6FB22200FD5F35 /* WaniKaniAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 07688F722E6FB22200FD5F35 /* WaniKaniAPI */; };
-		076890042E7069A200FD5F35 /* LocalCachingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A16785253AD8D200B5BCD6 /* LocalCachingClient.swift */; };
-		076890062E706A6200FD5F35 /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076890052E706A6200FD5F35 /* FMDB.framework */; };
 		076890082E706A8200FD5F35 /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076890072E706A8200FD5F35 /* FMDB.framework */; };
-		076890252E706C0E00FD5F35 /* RecentMistakeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791B8B5D2D6584C9000C8142 /* RecentMistakeHandler.swift */; };
-		076890342E706EEF00FD5F35 /* FMDatabase+Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A16770253AD8AD00B5BCD6 /* FMDatabase+Assert.swift */; };
-		076890352E706EFB00FD5F35 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633632EE201F3490006D582B /* Settings.swift */; };
-		076890362E706F0F00FD5F35 /* CommonErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791B8B5B2D657E2A000C8142 /* CommonErrors.swift */; };
-		076890542E70717000FD5F35 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076890532E70717000FD5F35 /* UIKit.framework */; };
 		07E34B2C2DF36C7A0016499B /* VoicevoxVoiceSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E34B2B2DF36C6D0016499B /* VoicevoxVoiceSelectionView.swift */; };
 		0A943349E17FA7889EFEE41F /* Pods_Tsurukame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC80AAF9736A570E3C4CC09E /* Pods_Tsurukame.framework */; };
 		480B243123D6830300FC2A82 /* Rexy in Frameworks */ = {isa = PBXBuildFile; productRef = 480B243023D6830300FC2A82 /* Rexy */; };
@@ -299,6 +292,7 @@
 
 /* Begin PBXFileReference section */
 		071E07042DFB672A0045238D /* AITutorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITutorView.swift; sourceTree = "<group>"; };
+		072547192E70869F004DD2B6 /* ReviewWidgetDataUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewWidgetDataUpdater.swift; sourceTree = "<group>"; };
 		0752EF212DC2C25C00754751 /* VoicevoxClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicevoxClient.swift; sourceTree = "<group>"; };
 		07688F4F2E6FB04000FD5F35 /* ReviewWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ReviewWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		07688F502E6FB04000FD5F35 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -546,6 +540,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0725470A2E70865E004DD2B6 /* WaniKaniAPI in Frameworks */,
 				07688F532E6FB04000FD5F35 /* SwiftUI.framework in Frameworks */,
 				07688F512E6FB04000FD5F35 /* WidgetKit.framework in Frameworks */,
 				71425A254A5C6DFCDDEF7A82 /* Pods_ReviewWidgetExtension.framework in Frameworks */,
@@ -741,6 +736,7 @@
 				63391B582779B8BF005CDA72 /* ReviewSettingsViewController.swift */,
 				637CA12B25D7EDFE0082580E /* ReviewSummaryViewController.swift */,
 				631CAD71234B4A96008CEA73 /* ReviewViewController.swift */,
+				072547192E70869F004DD2B6 /* ReviewWidgetDataUpdater.swift */,
 				63BEBF9625C57D4000123147 /* SearchResultViewController.swift */,
 				63F7F52B23D43DF6006A31FB /* Services.swift */,
 				63E1386927E6C12500AC4706 /* SettingChoiceListViewController.swift */,
@@ -1671,6 +1667,7 @@
 				791B8B5E2D6584C9000C8142 /* RecentMistakeHandler.swift in Sources */,
 				63C74C7F25C96F58004F6C99 /* SubjectDelegate.swift in Sources */,
 				63D1026923D7ED3200838F7C /* UIWindow+InterfaceStyle.swift in Sources */,
+				0725471A2E70869F004DD2B6 /* ReviewWidgetDataUpdater.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
