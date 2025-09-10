@@ -30,25 +30,27 @@ class ReviewWidgetDataUpdater {
     localCachingClient = LocalCachingClient(client: client, reachability: reachability)
   }
 
-  func updateReviewItem() {
+  func updateReviewItems() {
     let assignments = localCachingClient.getAllAssignments().filter { $0.isReviewStage }
-
-    if let assignment = assignments.randomElement(),
-       let subject = localCachingClient.getSubject(id: assignment.subjectID),
-       let reading = subject.primaryReading?.reading,
-       let meaning = subject.primaryMeaning?.meaning {
-      let sharedReviewItem = SharedReviewItem(id: subject.id, japanese: subject.japanese,
-                                              reading: reading,
-                                              meaning: meaning,
-                                              type: subject.subjectType.description)
-      save(sharedReviewItem)
+    let items = assignments.compactMap { assignment -> SharedReviewItem? in
+      guard let subject = localCachingClient.getSubject(id: assignment.subjectID),
+            let reading = subject.primaryReading?.reading,
+            let meaning = subject.primaryMeaning?.meaning
+      else {
+        return nil
+      }
+      return SharedReviewItem(id: subject.id, japanese: subject.japanese,
+                              reading: reading,
+                              meaning: meaning,
+                              type: subject.subjectType.description)
     }
+    save(items)
   }
 
-  private func save(_ item: SharedReviewItem) {
+  private func save(_ items: [SharedReviewItem]) {
     let sharedDefaults = UserDefaults(suiteName: "group.app.hanaso.tsurukame")!
-    if let encoded = try? JSONEncoder().encode(item) {
-      sharedDefaults.set(encoded, forKey: "sharedReviewItem")
+    if let encoded = try? JSONEncoder().encode(items) {
+      sharedDefaults.set(encoded, forKey: "sharedReviewItems")
       WidgetCenter.shared.reloadTimelines(ofKind: "ReviewWidget")
     }
   }

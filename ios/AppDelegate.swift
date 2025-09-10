@@ -181,7 +181,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelega
   }
 
   func applicationDidEnterBackground(_: UIApplication) {
-    ReviewWidgetDataUpdater.shared.updateReviewItem()
+    ReviewWidgetDataUpdater.shared.updateReviewItems()
     scheduleAppRefresh()
   }
 

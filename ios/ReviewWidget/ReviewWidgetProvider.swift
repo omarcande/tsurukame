@@ -28,14 +28,15 @@ struct ReviewWidgetProvider: TimelineProvider {
 
   // The snapshot is for a single, quick preview. It should also be clear.
   func getSnapshot(in _: Context, completion: @escaping (ReviewEntry) -> Void) {
-    let entry = ReviewEntry(date: Date(), reviewItem: readReviewItem(), isBlurred: false)
+    let entry = ReviewEntry(date: Date(), reviewItem: readReviewItems().randomElement(),
+                            isBlurred: false)
     completion(entry)
   }
 
   // The timeline is where the animation sequence is created.
   func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
     let currentDate = Date()
-    let reviewItem = readReviewItem()
+    let reviewItem = readReviewItems().randomElement()
 
     // 1. First entry is NOW and is BLURRED.
     let blurredEntry = ReviewEntry(date: currentDate, reviewItem: reviewItem, isBlurred: true)
@@ -49,12 +50,12 @@ struct ReviewWidgetProvider: TimelineProvider {
     completion(timeline)
   }
 
-  private func readReviewItem() -> SharedReviewItem? {
+  private func readReviewItems() -> [SharedReviewItem] {
     let sharedDefaults = UserDefaults(suiteName: "group.app.hanaso.tsurukame")!
-    if let data = sharedDefaults.data(forKey: "sharedReviewItem") {
-      return try? JSONDecoder().decode(SharedReviewItem.self, from: data)
+    if let data = sharedDefaults.data(forKey: "sharedReviewItems") {
+      return (try? JSONDecoder().decode([SharedReviewItem].self, from: data)) ?? []
     }
-    return nil
+    return []
   }
 }
 
