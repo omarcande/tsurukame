@@ -22,6 +22,7 @@ class AttributedModelItem: NSObject, TableModelItem {
 
   var rightButtonImage: UIImage?
   var rightButtonCallback: ((_ cell: AttributedModelCell) -> Void)?
+  var rightButtonLongPressCallback: ((_ cell: AttributedModelCell) -> Void)?
 
   init(text: NSAttributedString) {
     self.text = text
@@ -128,9 +129,13 @@ class AttributedModelCell: TableModelCell {
     if let rightButtonImage = item.rightButtonImage {
       if rightButton == nil {
         rightButton = UIButton()
-        rightButton!
-          .addTarget(self, action: #selector(AttributedModelCell.didTapRightButton),
-                     for: .touchUpInside)
+        rightButton!.addTarget(self, action: #selector(AttributedModelCell.didTapRightButton),
+                               for: .touchUpInside)
+
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self,
+                                                               action: #selector(didLongPressRightButton(_:)))
+        rightButton!.addGestureRecognizer(longPressRecognizer)
+
         addSubview(rightButton!)
       }
       rightButton!.setImage(rightButtonImage, for: .normal)
@@ -149,5 +154,10 @@ class AttributedModelCell: TableModelCell {
 
   @objc func didTapRightButton() {
     item.rightButtonCallback?(self)
+  }
+
+  @objc private func didLongPressRightButton(_ gesture: UILongPressGestureRecognizer) {
+    guard gesture.state == .began else { return }
+    item.rightButtonLongPressCallback?(self)
   }
 }
