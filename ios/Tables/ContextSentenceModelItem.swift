@@ -25,7 +25,7 @@ class ContextSentenceModelItem: AttributedModelItem {
   let japaneseText: NSAttributedString
   let englishText: NSAttributedString
   var blurred = Settings.blurContextSentences
-  let speechSynthesizer = AVSpeechSynthesizer()
+  let ttsAudioManager = TTSAudioManager()
 
   init(_ sentence: TKMVocabulary.Sentence,
        highlightSubject: TKMSubject,
@@ -67,12 +67,21 @@ class ContextSentenceModelItem: AttributedModelItem {
   }
 
   @objc private func readContextSentence() {
-    if speechSynthesizer.isSpeaking {
-      speechSynthesizer.stopSpeaking(at: .immediate)
-    } else {
-      let utterance = AVSpeechUtterance(string: japaneseText.string)
-      utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP") // Japanese voice
-      speechSynthesizer.speak(utterance)
+    if ttsAudioManager.isPlaying {
+      ttsAudioManager.stop()
+    }
+
+    Task {
+      do {
+        guard let voiceData = try await ttsAudioManager.retrieveAudio(for: japaneseText.string)
+        else {
+          print("Error: Voice audio not available")
+          return
+        }
+        ttsAudioManager.playAudio(from: voiceData)
+      } catch {
+        print("Error: \(error)")
+      }
     }
   }
 
@@ -81,7 +90,7 @@ class ContextSentenceModelItem: AttributedModelItem {
   }
 }
 
-private class ContextSentenceModelCell: AttributedModelCell, AVSpeechSynthesizerDelegate {
+private class ContextSentenceModelCell: AttributedModelCell {
   @TypedModelItem var contextSentenceItem: ContextSentenceModelItem
 
   var blurredOverlay: UIView!
@@ -97,7 +106,7 @@ private class ContextSentenceModelCell: AttributedModelCell, AVSpeechSynthesizer
     super.update()
 
     blurredOverlay.alpha = contextSentenceItem.blurred ? 1 : 0
-    contextSentenceItem.speechSynthesizer.delegate = self
+    contextSentenceItem.ttsAudioManager.delegate = self
   }
 
   override func layoutSubviews() {
@@ -148,16 +157,26 @@ private class ContextSentenceModelCell: AttributedModelCell, AVSpeechSynthesizer
       self.blurredOverlay.alpha = 0
     }
   }
+}
 
-  func speechSynthesizer(_: AVSpeechSynthesizer, didStart _: AVSpeechUtterance) {
+extension ContextSentenceModelCell: TTSAudioManagerDelegate {
+  func ttsAudioManagerDidBeginTTSRetrieve() {
+    rightButton?.setImage(Asset.baselineCloudDownloadBlack24pt.image, for: .normal)
+  }
+
+  func ttsAudioManagerDidFinishTTSRetrieve() {
+    // noop
+  }
+
+  func ttsAudioManagerDidStartPlaying() {
     rightButton?.setImage(Asset.baselineStopBlack24pt.image, for: .normal)
   }
 
-  func speechSynthesizer(_: AVSpeechSynthesizer, didFinish _: AVSpeechUtterance) {
-    rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
+  func ttsAudioManagerDidPausePlaying() {
+    // noop
   }
 
-  func speechSynthesizer(_: AVSpeechSynthesizer, didCancel _: AVSpeechUtterance) {
+  func ttsAudioManagerDidFinishPlaying() {
     rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
   }
 }
