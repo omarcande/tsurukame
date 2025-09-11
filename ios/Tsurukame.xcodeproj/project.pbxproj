@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0A943349E17FA7889EFEE41F /* Pods_Tsurukame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC80AAF9736A570E3C4CC09E /* Pods_Tsurukame.framework */; };
+		3A538A432E7374C000A2C44C /* TTSAudioExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A538A3F2E7374C000A2C44C /* TTSAudioExtensions.swift */; };
+		3A538A442E7374C000A2C44C /* TTSAudioFileWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A538A402E7374C000A2C44C /* TTSAudioFileWriter.swift */; };
+		3A538A452E7374C000A2C44C /* TTSAudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A538A412E7374C000A2C44C /* TTSAudioManager.swift */; };
 		480B243123D6830300FC2A82 /* Rexy in Frameworks */ = {isa = PBXBuildFile; productRef = 480B243023D6830300FC2A82 /* Rexy */; };
 		481B2FED23C55AAF0041EF1F /* CurrentLevelReviewTimeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481B2FEC23C55AAF0041EF1F /* CurrentLevelReviewTimeItem.swift */; };
 		4820306724D849E100B40FDD /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633632EE201F3490006D582B /* Settings.swift */; };
@@ -270,6 +273,9 @@
 		21894D9E0883B0107075DD6F /* Pods-Tsurukame.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tsurukame.release.xcconfig"; path = "Target Support Files/Pods-Tsurukame/Pods-Tsurukame.release.xcconfig"; sourceTree = "<group>"; };
 		301BAAC2C21E4A99238D1E80 /* Pods-FontScreenshotter-FontScreenshotterUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FontScreenshotter-FontScreenshotterUITests.release.xcconfig"; path = "Target Support Files/Pods-FontScreenshotter-FontScreenshotterUITests/Pods-FontScreenshotter-FontScreenshotterUITests.release.xcconfig"; sourceTree = "<group>"; };
 		34E86AD95515CD815B3086D0 /* Pods-Tsurukame.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tsurukame.debug.xcconfig"; path = "Target Support Files/Pods-Tsurukame/Pods-Tsurukame.debug.xcconfig"; sourceTree = "<group>"; };
+		3A538A3F2E7374C000A2C44C /* TTSAudioExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSAudioExtensions.swift; sourceTree = "<group>"; };
+		3A538A402E7374C000A2C44C /* TTSAudioFileWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSAudioFileWriter.swift; sourceTree = "<group>"; };
+		3A538A412E7374C000A2C44C /* TTSAudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSAudioManager.swift; sourceTree = "<group>"; };
 		404461BC39B4A19B128F9E69 /* Pods_FontScreenshotter_FontScreenshotterUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FontScreenshotter_FontScreenshotterUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		481B2FEC23C55AAF0041EF1F /* CurrentLevelReviewTimeItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentLevelReviewTimeItem.swift; sourceTree = "<group>"; };
 		4874562D261DD28E00F33AA3 /* FontScreenshotterUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontScreenshotterUITests.swift; sourceTree = "<group>"; };
@@ -529,6 +535,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3A538A422E7374C000A2C44C /* ContextSentenceTTS */ = {
+			isa = PBXGroup;
+			children = (
+				3A538A3F2E7374C000A2C44C /* TTSAudioExtensions.swift */,
+				3A538A402E7374C000A2C44C /* TTSAudioFileWriter.swift */,
+				3A538A412E7374C000A2C44C /* TTSAudioManager.swift */,
+			);
+			path = ContextSentenceTTS;
+			sourceTree = "<group>";
+		};
 		41897D922372287F00F6A0B7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -733,6 +749,7 @@
 				63F7F52023D3F36E006A31FB /* AttributedModelItem.swift */,
 				63358E9D273664F50013A2AC /* BasicModelItem.swift */,
 				63358EA127366D720013A2AC /* CheckmarkModelItem.swift */,
+				3A538A422E7374C000A2C44C /* ContextSentenceTTS */,
 				6398480D23D699E70077EB6B /* ContextSentenceModelItem.swift */,
 				636A63DD238A107A00902269 /* CurrentLevelChartItem.swift */,
 				481B2FEC23C55AAF0041EF1F /* CurrentLevelReviewTimeItem.swift */,
@@ -1454,6 +1471,9 @@
 				636A63E7238A607A00902269 /* VacationModeView.swift in Sources */,
 				63C4EA562C257F57003D3C0B /* IB-Segues+Generated.swift in Sources */,
 				63391B5D2779BECB005CDA72 /* SubjectDetailsSettingsViewController.swift in Sources */,
+				3A538A432E7374C000A2C44C /* TTSAudioExtensions.swift in Sources */,
+				3A538A442E7374C000A2C44C /* TTSAudioFileWriter.swift in Sources */,
+				3A538A452E7374C000A2C44C /* TTSAudioManager.swift in Sources */,
 				638EFE3827E8898300D693D0 /* MainTitleView.swift in Sources */,
 				63BFA78E218EB6890058E885 /* OfflineAudioViewController.swift in Sources */,
 				63CBFF2627731B8B0086BA5F /* DownloadViewController.swift in Sources */,
@@ -1777,16 +1797,16 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Resources/Tsurukame.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1114;
 				DEFINES_MODULE = YES;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
-				DEVELOPMENT_TEAM = 7B2GP77Y4A;
+				DEVELOPMENT_TEAM = 5U95A7JHQ8;
 				ENABLE_MODULE_VERIFIER = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1795,9 +1815,9 @@
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.wanikani;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.pocketlim.wanikani;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "match Development com.davidsansome.wanikani 1651749118";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Tsurukame-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1814,16 +1834,16 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Resources/Tsurukame.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1114;
 				DEFINES_MODULE = YES;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
-				DEVELOPMENT_TEAM = 7B2GP77Y4A;
+				DEVELOPMENT_TEAM = 5U95A7JHQ8;
 				ENABLE_MODULE_VERIFIER = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1831,10 +1851,10 @@
 				MARKETING_VERSION = 1.17;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.wanikani;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.pocketlim.wanikani;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "d5cd9a5d-213c-42f1-b72b-185d1259a0f2";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.davidsansome.wanikani";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Tsurukame-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2069,18 +2089,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1114;
-				DEVELOPMENT_TEAM = 7B2GP77Y4A;
+				DEVELOPMENT_TEAM = 5U95A7JHQ8;
 				IBSC_MODULE = Tsurukame_Complication_Extension;
 				INFOPLIST_FILE = Complication/Info.plist;
 				MARKETING_VERSION = 1.18;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.wanikani.watchapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.pocketlim.wanikani.watchapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "match Development com.davidsansome.wanikani.watchapp 1651749127";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -2097,18 +2117,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1114;
-				DEVELOPMENT_TEAM = 7B2GP77Y4A;
+				DEVELOPMENT_TEAM = 5U95A7JHQ8;
 				IBSC_MODULE = Tsurukame_Complication_Extension;
 				INFOPLIST_FILE = Complication/Info.plist;
 				MARKETING_VERSION = 1.18;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.wanikani.watchapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.pocketlim.wanikani.watchapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "df06fa1e-0be6-4ca1-8d8d-352da185fec6";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.davidsansome.wanikani.watchapp";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -2124,10 +2144,10 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1114;
-				DEVELOPMENT_TEAM = 7B2GP77Y4A;
+				DEVELOPMENT_TEAM = 5U95A7JHQ8;
 				INFOPLIST_FILE = ComplicationExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2137,9 +2157,9 @@
 				MARKETING_VERSION = 1.18;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.wanikani.watchapp.c;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.pocketlim.wanikani.watchapp.c;
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE_SPECIFIER = "match Development com.davidsansome.wanikani.watchapp.c 1651749139";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -2156,10 +2176,10 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1114;
-				DEVELOPMENT_TEAM = 7B2GP77Y4A;
+				DEVELOPMENT_TEAM = 5U95A7JHQ8;
 				INFOPLIST_FILE = ComplicationExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2168,10 +2188,10 @@
 				);
 				MARKETING_VERSION = 1.18;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.wanikani.watchapp.c;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.pocketlim.wanikani.watchapp.c;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "a1f9acf7-3902-4937-a701-fd4e488ec576";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.davidsansome.wanikani.watchapp.c";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
