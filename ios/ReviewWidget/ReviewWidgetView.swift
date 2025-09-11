@@ -17,12 +17,13 @@ import WidgetKit
 
 struct ReviewWidgetView: View {
   var entry: ReviewWidgetProvider.Entry
+  @Environment(\.colorScheme) var colorScheme
 
-  private func AdaptiveColor(light: Color, dark: Color) -> Color {
+  private func AdaptiveColor(light: Color, dark _: Color) -> Color {
     @Environment(\.colorScheme) var colorScheme
-    if colorScheme == .dark {
-      return dark
-    }
+//    if self.colorScheme == .dark {
+//      return dark
+//    }
     return light
   }
 
@@ -49,6 +50,8 @@ struct ReviewWidgetView: View {
     let kanjiGradient = [kanjiColor1, kanjiColor2]
     let vocabularyGradient = [vocabularyColor1, vocabularyColor2]
 
+      let darkGradient = [Color(red: 60 / 255, green: 60 / 255, blue: 75 / 255), Color(red: 28 / 255, green: 28 / 255, blue: 30 / 255)]
+
     let gradient = switch entry.reviewItem?.type {
     case "Radical":
       radicalGradient
@@ -60,33 +63,36 @@ struct ReviewWidgetView: View {
       vocabularyGradient
     }
 
+    let textColor = self.colorScheme == .dark ? gradient[0] : Color.white
+
     VStack(alignment: .leading, spacing: 2) {
       if let item = entry.reviewItem {
         Text(item.japanese)
           .font(.largeTitle)
-          .foregroundColor(.white)
+          .foregroundColor(textColor)
 
         Group {
           Text(item.reading)
             .font(.title2)
-            .foregroundColor(.white.opacity(0.8))
+            .foregroundColor(textColor.opacity(0.8))
 
           Text(item.meaning)
             .font(.body)
-            .foregroundColor(.white)
+            .foregroundColor(textColor)
             .lineLimit(2)
             .multilineTextAlignment(.leading)
         }.blur(radius: entry.isBlurred ? 4 : 0)
       } else {
         Text("No review available.")
-          .foregroundColor(.white)
+          .foregroundColor(textColor)
       }
     }
     // .padding()
     .containerBackground(for: .widget) {
-      LinearGradient(gradient: Gradient(colors: gradient),
-                     startPoint: .top,
-                     endPoint: .bottom)
+      LinearGradient(gradient: Gradient(colors: self
+                       .colorScheme == .dark ? darkGradient : gradient),
+      startPoint: .top,
+                     endPoint: .bottomTrailing)
     }
   }
 }
@@ -95,10 +101,10 @@ struct ReviewWidgetView_Previews: PreviewProvider {
   static var previews: some View {
     let reviewItem: SharedReviewItem = .init(id: 123, japanese: "今", reading: "いま",
                                              meaning: "now this has a longer meaning",
-                                             type: "Radical")
+                                             type: "Vocabulary")
 
     let entry: ReviewWidgetProvider.Entry = .init(date: Date(), reviewItem: reviewItem,
-                                                  isBlurred: true)
+                                                  isBlurred: false)
     ReviewWidgetView(entry: entry).previewContext(WidgetPreviewContext(family: .systemSmall))
   }
 }
