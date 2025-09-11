@@ -1,16 +1,16 @@
 {
   "images" : [
     {
-      "idiom" : "iphone",
-      "filename" : "launchscreen.jpg"
+      "filename" : "launchscreen.jpg",
+      "idiom" : "iphone"
     },
     {
-      "idiom" : "ipad",
-      "filename" : "launchscreen-ipad.jpg"
+      "filename" : "launchscreen-ipad.jpg",
+      "idiom" : "ipad"
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
   }
 }
