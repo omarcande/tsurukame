@@ -15,6 +15,9 @@
 		07688F532E6FB04000FD5F35 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07688F522E6FB04000FD5F35 /* SwiftUI.framework */; };
 		07688F642E6FB04200FD5F35 /* ReviewWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 07688F4F2E6FB04000FD5F35 /* ReviewWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		076890082E706A8200FD5F35 /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076890072E706A8200FD5F35 /* FMDB.framework */; };
+		07D348FC2E74A92B000C6CCA /* TTSAudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D348FA2E74A92B000C6CCA /* TTSAudioManager.swift */; };
+		07D348FD2E74A92B000C6CCA /* TTSAudioExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D348F82E74A92B000C6CCA /* TTSAudioExtensions.swift */; };
+		07D348FE2E74A92B000C6CCA /* TTSAudioFileWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D348F92E74A92B000C6CCA /* TTSAudioFileWriter.swift */; };
 		07E34B2C2DF36C7A0016499B /* VoicevoxVoiceSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E34B2B2DF36C6D0016499B /* VoicevoxVoiceSelectionView.swift */; };
 		0A943349E17FA7889EFEE41F /* Pods_Tsurukame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC80AAF9736A570E3C4CC09E /* Pods_Tsurukame.framework */; };
 		480B243123D6830300FC2A82 /* Rexy in Frameworks */ = {isa = PBXBuildFile; productRef = 480B243023D6830300FC2A82 /* Rexy */; };
@@ -302,6 +305,9 @@
 		076890052E706A6200FD5F35 /* FMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		076890072E706A8200FD5F35 /* FMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		076890532E70717000FD5F35 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		07D348F82E74A92B000C6CCA /* TTSAudioExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSAudioExtensions.swift; sourceTree = "<group>"; };
+		07D348F92E74A92B000C6CCA /* TTSAudioFileWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSAudioFileWriter.swift; sourceTree = "<group>"; };
+		07D348FA2E74A92B000C6CCA /* TTSAudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSAudioManager.swift; sourceTree = "<group>"; };
 		07E34B2B2DF36C6D0016499B /* VoicevoxVoiceSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicevoxVoiceSelectionView.swift; sourceTree = "<group>"; };
 		10E5709643045C62AD6AC427 /* Pods_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		116070EC9485A78089387729 /* Pods-FontScreenshotterUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FontScreenshotterUITests.debug.xcconfig"; path = "Target Support Files/Pods-FontScreenshotterUITests/Pods-FontScreenshotterUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -613,6 +619,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		07D348FB2E74A92B000C6CCA /* ContextSentenceTTS */ = {
+			isa = PBXGroup;
+			children = (
+				07D348F82E74A92B000C6CCA /* TTSAudioExtensions.swift */,
+				07D348F92E74A92B000C6CCA /* TTSAudioFileWriter.swift */,
+				07D348FA2E74A92B000C6CCA /* TTSAudioManager.swift */,
+			);
+			path = ContextSentenceTTS;
+			sourceTree = "<group>";
+		};
 		41897D922372287F00F6A0B7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -825,6 +841,7 @@
 				63358E9D273664F50013A2AC /* BasicModelItem.swift */,
 				63358EA127366D720013A2AC /* CheckmarkModelItem.swift */,
 				6398480D23D699E70077EB6B /* ContextSentenceModelItem.swift */,
+				07D348FB2E74A92B000C6CCA /* ContextSentenceTTS */,
 				636A63DD238A107A00902269 /* CurrentLevelChartItem.swift */,
 				481B2FEC23C55AAF0041EF1F /* CurrentLevelReviewTimeItem.swift */,
 				63CBFF2127730ED00086BA5F /* DownloadModelItem.swift */,
@@ -1603,6 +1620,9 @@
 				63EF5752260617E30038551A /* LoginViewController.swift in Sources */,
 				63A9A55D282389C900602D09 /* ReviewSession.swift in Sources */,
 				C904455D2395DBAE001BC48B /* AnswerTextField.swift in Sources */,
+				07D348FC2E74A92B000C6CCA /* TTSAudioManager.swift in Sources */,
+				07D348FD2E74A92B000C6CCA /* TTSAudioExtensions.swift in Sources */,
+				07D348FE2E74A92B000C6CCA /* TTSAudioFileWriter.swift in Sources */,
 				63ECACD32C3430F900A0FBDD /* MainPracticeTabViewController.swift in Sources */,
 				636A63E7238A607A00902269 /* VacationModeView.swift in Sources */,
 				63C4EA562C257F57003D3C0B /* IB-Segues+Generated.swift in Sources */,
