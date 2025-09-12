@@ -166,6 +166,15 @@ class SettingsViewController: UITableViewController, TKMViewController {
 class VoicevoxSettingsViewController: UITableViewController, TKMViewController {
   private var model: TableModel?
 
+  init() {
+    super.init(style: .insetGrouped)
+    self.title = "Voicevox"
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
   private let kFontSize: CGFloat = {
     let bodyFontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body)
     return bodyFontDescriptor.pointSize

@@ -185,6 +185,15 @@ func makeInterfaceStyleViewController() -> UIViewController {
 class AITutorSettingsViewController: UITableViewController, TKMViewController {
   private var model: TableModel?
 
+  init() {
+    super.init(style: .insetGrouped)
+    self.title = "AI Tutor"
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
   private let kFontSize: CGFloat = {
     let bodyFontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body)
     return bodyFontDescriptor.pointSize
