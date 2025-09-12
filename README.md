@@ -1,16 +1,47 @@
+# Tsurukame+
+
+**This is a fork of the original [Tsurukame GitHub repo](https://github.com/davidsansome/tsurukame).**
+
+The purpose of this fork is to add some enhancements for personal use, but it is free for anyone to enjoy.
+
 The content displayed in Tsurukame comes from WaniKani, and its use is covered by
 https://www.wanikani.com/terms, NOT the terms of the Tsurukame software license.
 
 [![CircleCI](https://circleci.com/gh/davidsansome/tsurukame.svg?style=shield)](https://circleci.com/gh/davidsansome/tsurukame)
 
-Tsurukame is an unofficial WaniKani app for iOS.  It helps you learn Japanese Kanji.
+Tsurukame is an unofficial WaniKani app for iOS. It helps you learn Japanese Kanji.
 
-You can download the latest stable release of Tsurukame on the App Store.
+You can download the latest stable release of the original Tsurukame on the App Store.
 
 [![Download on the App Store](https://devimages-cdn.apple.com/app-store/marketing/guidelines/images/badge-example-preferred.png)](https://itunes.apple.com/us/app/tsurukame-for-wanikani/id1367114761)
 
-Or join the [TestFlight beta](https://testflight.apple.com/join/Fijye2AA)
-which is updated automatically any time there's a commit to this Git repository.
+Or join the [TestFlight beta](https://testflight.apple.com/join/Fijye2AA) for the original app,
+which is updated automatically any time there's a commit to the original Git repository.
+
+## New Features in this Fork
+
+### Context Sentence Reading
+This feature reads the context sentences aloud during lessons and reviews.
+
+*   **Configuration**: You can optionally configure a [Voicevox](https://voicevox.hiroshiba.jp/) server in the settings for high-quality, customizable text-to-speech.
+*   **Fallback**: If a Voicevox server is not configured, the app will fall back to using the built-in AVSynthesizer for voice synthesis.
+
+### AI Tutor
+The AI Tutor provides explanations and help with radicals, kanji, and vocabulary. When you ask for help on a context sentence, the AI Tutor sends the sentence to the Gemini API with a detailed prompt instructing it to act as a Japanese language tutor.
+
+The AI will provide a response with four sections:
+1.  **Hiragana & Romanji**: The sentence written in hiragana and romanji.
+2.  **Translation**: The English translation of the sentence.
+3.  **Breakdown and Explanation**: A detailed grammatical breakdown of the sentence.
+4.  **Overall Meaning and Nuances**: An explanation of the sentence's overall meaning and any nuances.
+
+*   **Configuration**: To use the AI Tutor, you need to configure your API Key for Google's Gemini in the app's settings.
+
+### Review Widget
+A home screen widget that helps you review items.
+
+*   **Dark Mode**: The widget supports dark mode and will adapt to your system's theme.
+*   **Review Mechanism**: The widget displays a review item with the reading and meaning blurred out. After 10 seconds, the reading and meaning are revealed, and the widget refreshes with a new item.
 
 # Building Tsurukame
 
