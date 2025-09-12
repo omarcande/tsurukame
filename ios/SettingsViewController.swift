@@ -41,7 +41,7 @@ class SettingsViewController: UITableViewController, TKMViewController {
   private func rerender() {
     let model = MutableTableModel(tableView: tableView, delegate: self)
 
-    model.add(section: "Settings")
+    model.add(section: "General")
     model.add(BasicModelItem(style: .default,
                              title: "Appearance & Notifications",
                              accessoryType: .disclosureIndicator) { [unowned self] in
@@ -62,10 +62,18 @@ class SettingsViewController: UITableViewController, TKMViewController {
                              accessoryType: .disclosureIndicator) { [unowned self] in
         self.perform(segue: StoryboardSegue.Settings.subjectDetailsSettings, sender: self)
       })
+
+    model.add(section: "Features")
     model.add(BasicModelItem(style: .default,
-                             title: "Voicevox Voices",
+                             title: "AI Tutor",
                              accessoryType: .disclosureIndicator) { [unowned self] in
-        let vc = UIHostingController(rootView: VoicevoxVoiceSelectionView())
+        let vc = AITutorSettingsViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+      })
+    model.add(BasicModelItem(style: .default,
+                             title: "Voicevox",
+                             accessoryType: .disclosureIndicator) { [unowned self] in
+        let vc = VoicevoxSettingsViewController()
         self.navigationController?.pushViewController(vc, animated: true)
       })
 
@@ -152,5 +160,54 @@ class SettingsViewController: UITableViewController, TKMViewController {
     let c = UIAlertController(title: "Image cache cleared", message: nil, preferredStyle: .alert)
     c.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
     present(c, animated: true, completion: nil)
+  }
+}
+
+class VoicevoxSettingsViewController: UITableViewController, TKMViewController {
+  private var model: TableModel?
+
+  private let kFontSize: CGFloat = {
+    let bodyFontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body)
+    return bodyFontDescriptor.pointSize
+  }()
+
+  // MARK: - TKMViewController
+
+  var canSwipeToGoBack: Bool { true }
+
+  // MARK: - UIViewController
+
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    navigationController?.isNavigationBarHidden = false
+    rerender()
+  }
+
+  private func rerender() {
+    let model = MutableTableModel(tableView: tableView)
+
+    model.add(section: "VOICEVOX URL")
+    let voiceVoxURLItem =
+      EditableTextModelItem(text: NSAttributedString(string: Settings.voicevoxURL),
+                            placeholderText: "e.g. http://192.168.1.2:50021",
+                            rightButtonImage: nil,
+                            font: UIFont.systemFont(ofSize: kFontSize),
+                            autoCapitalizationType: .none,
+                            maximumNumberOfLines: 1)
+    voiceVoxURLItem.textChangedCallback = { (text: String) in
+      Settings.voicevoxURL = text
+    }
+    model.add(voiceVoxURLItem)
+
+    model.add(section: "")
+    model.add(BasicModelItem(style: .default,
+                             title: "Voicevox Voices",
+                             accessoryType: .disclosureIndicator) { [unowned self] in
+        let vc = UIHostingController(rootView: VoicevoxVoiceSelectionView())
+        self.navigationController?.pushViewController(vc, animated: true)
+      })
+
+    self.model = model
+    model.reloadTable()
   }
 }
