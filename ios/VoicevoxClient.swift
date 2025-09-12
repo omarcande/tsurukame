@@ -77,25 +77,39 @@ protocol VoicevoxClientDelegate: AnyObject {
 }
 
 class VoicevoxClient: NSObject {
-  let baseURL = URL(string: "http://pop-os.local:50021")!
   var audioPlayer: AVAudioPlayer?
   weak var delegate: VoicevoxClientDelegate?
 
+  private func getBaseURL() -> URL? {
+    let urlString = Settings.voicevoxURL
+    if urlString.isEmpty {
+      return nil
+    }
+    return URL(string: urlString)
+  }
+
   func speak(text: String, voiceStyle: VoicevoxStyle = VoicevoxStyle.random(),
-             completion: @escaping (Error?) -> Void) {
+             completion: @escaping (Error?) -> Void) -> Bool {
     let id = voiceStyle == .randomVoice ? VoicevoxStyle.random().rawValue : voiceStyle.rawValue
-    speak(text: text, voiceStyleId: id, completion: completion)
+    return speak(text: text, voiceStyleId: id, completion: completion)
   }
 
   func speak(text: String, voiceStyleId: Int,
-             completion: @escaping (Error?) -> Void) {
+             completion: @escaping (Error?) -> Void) -> Bool {
     delegate?.voicevoxClientDidStartFetching()
 
     if !isVoiceVoxAvailable() {
       completion(NSError(domain: "VoicevoxClient", code: -3,
                          userInfo: [NSLocalizedDescriptionKey: "No network connection"]))
       delegate?.voicevoxClientDidThrowError()
-      return
+      return false
+    }
+
+    guard let baseURL = getBaseURL() else {
+      completion(NSError(domain: "VoicevoxClient", code: -4,
+                         userInfo: [NSLocalizedDescriptionKey: "Voicevox domain not set"]))
+      delegate?.voicevoxClientDidThrowError()
+      return false
     }
 
     let speakerID = voiceStyleId
@@ -117,7 +131,7 @@ class VoicevoxClient: NSObject {
       }
 
       // 3. Create /synthesis request
-      var synthURL = self.baseURL.appendingPathComponent("synthesis")
+      var synthURL = baseURL.appendingPathComponent("synthesis")
       synthURL = URL(string: "\(synthURL)?speaker=\(speakerID)")!
 
       var synthRequest = URLRequest(url: synthURL)
@@ -163,6 +177,7 @@ class VoicevoxClient: NSObject {
         }
       }.resume()
     }.resume()
+    return true
   }
 
   func stopPlayback() {
@@ -177,6 +192,10 @@ class VoicevoxClient: NSObject {
   }
 
   func isVoiceVoxAvailable() -> Bool {
+    guard let baseURL = getBaseURL() else {
+      return false
+    }
+
     // Check if baseURL is reachable before proceeding
     var request = URLRequest(url: baseURL)
     request.httpMethod = "HEAD"

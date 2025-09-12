@@ -82,24 +82,30 @@ class ContextSentenceModelItem: AttributedModelItem {
     topVC.present(hostingController, animated: true, completion: nil)
   }
 
+  private func fallbackToAVSpeechSynthesizer() {
+    if speechSynthesizer.isSpeaking {
+      speechSynthesizer.stopSpeaking(at: .immediate)
+    } else {
+      let utterance = AVSpeechUtterance(string: japaneseText.string)
+      utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+      speechSynthesizer.speak(utterance)
+    }
+  }
+
   @objc private func readContextSentence() {
     if voicevox.isPlaying() {
       voicevox.stopPlayback()
     } else {
       let selectedID = UserDefaults.standard.integer(forKey: "SelectedVoicevoxStyle")
 
-      voicevox.speak(text: japaneseText.string,
-                     voiceStyleId: selectedID) { error in
-        if let error = error {
-          print("❌ Voicevox failed: \(error.localizedDescription)")
-          if self.speechSynthesizer.isSpeaking {
-            self.speechSynthesizer.stopSpeaking(at: .immediate)
-          } else {
-            let utterance = AVSpeechUtterance(string: self.japaneseText.string)
-            utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP") // Japanese voice
-            self.speechSynthesizer.speak(utterance)
-          }
-        }
+      if !voicevox.speak(text: japaneseText.string,
+                         voiceStyleId: selectedID,
+                         completion: { error in
+                           if error != nil {
+                             self.fallbackToAVSpeechSynthesizer()
+                           }
+                         }) {
+        fallbackToAVSpeechSynthesizer()
       }
     }
   }

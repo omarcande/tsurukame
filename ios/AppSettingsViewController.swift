@@ -71,6 +71,32 @@ class AppSettingsViewController: UITableViewController, TKMViewController {
     }
     model.add(gravatarItem)
 
+    model.add(section: "VOICEVOX URL")
+    let voiceVoxURLItem =
+      EditableTextModelItem(text: NSAttributedString(string: Settings.voicevoxURL),
+                            placeholderText: "e.g. http://192.168.1.2:50021",
+                            rightButtonImage: nil,
+                            font: UIFont.systemFont(ofSize: kFontSize),
+                            autoCapitalizationType: .none,
+                            maximumNumberOfLines: 1)
+    voiceVoxURLItem.textChangedCallback = { (text: String) in
+      Settings.voicevoxURL = text
+    }
+    model.add(voiceVoxURLItem)
+
+    model.add(section: "Gemini")
+    let geminiAPIKeyItem =
+      EditableTextModelItem(text: NSAttributedString(string: Settings.geminiAPIKey),
+                            placeholderText: "API Key",
+                            rightButtonImage: nil,
+                            font: UIFont.systemFont(ofSize: kFontSize),
+                            autoCapitalizationType: .none,
+                            maximumNumberOfLines: 1)
+    geminiAPIKeyItem.textChangedCallback = { (text: String) in
+      Settings.geminiAPIKey = text
+    }
+    model.add(geminiAPIKeyItem)
+
     model.add(section: "Notifications")
     model.add(SwitchModelItem(style: .default,
                               title: "Notify for all available reviews",
