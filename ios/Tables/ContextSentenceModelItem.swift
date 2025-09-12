@@ -28,6 +28,7 @@ class ContextSentenceModelItem: AttributedModelItem {
   var blurred = Settings.blurContextSentences
   let speechSynthesizer = AVSpeechSynthesizer()
   let voicevox = VoicevoxClient()
+  let ttsAudioManager = TTSAudioManager()
 
   init(_ sentence: TKMVocabulary.Sentence,
        highlightSubject: TKMSubject,
@@ -92,6 +93,28 @@ class ContextSentenceModelItem: AttributedModelItem {
     }
   }
 
+  @objc private func readSentenceWithGoogleTTS() {
+    if ttsAudioManager.isPlaying {
+      ttsAudioManager.stop()
+    }
+
+    Task {
+      do {
+        guard let voiceData = try await ttsAudioManager
+          .retrieveAudio(for: japaneseText.string)
+        else {
+          print("Error: Voice audio not available")
+            fallbackToAVSpeechSynthesizer()
+          return
+        }
+        ttsAudioManager.playAudio(from: voiceData)
+      } catch {
+        print("Error: \(error)")
+          fallbackToAVSpeechSynthesizer()
+      }
+    }
+  }
+
   @objc private func readContextSentence() {
     if voicevox.isPlaying() {
       voicevox.stopPlayback()
@@ -102,10 +125,10 @@ class ContextSentenceModelItem: AttributedModelItem {
                          voiceStyleId: selectedID,
                          completion: { error in
                            if error != nil {
-                             self.fallbackToAVSpeechSynthesizer()
+                             self.readSentenceWithGoogleTTS()
                            }
                          }) {
-        fallbackToAVSpeechSynthesizer()
+        readSentenceWithGoogleTTS()
       }
     }
   }
@@ -115,8 +138,7 @@ class ContextSentenceModelItem: AttributedModelItem {
   }
 }
 
-private class ContextSentenceModelCell: AttributedModelCell, AVSpeechSynthesizerDelegate,
-  VoicevoxClientDelegate {
+private class ContextSentenceModelCell: AttributedModelCell {
   @TypedModelItem var contextSentenceItem: ContextSentenceModelItem
 
   var blurredOverlay: UIView!
@@ -134,6 +156,7 @@ private class ContextSentenceModelCell: AttributedModelCell, AVSpeechSynthesizer
     blurredOverlay.alpha = contextSentenceItem.blurred ? 1 : 0
     contextSentenceItem.speechSynthesizer.delegate = self
     contextSentenceItem.voicevox.delegate = self
+    contextSentenceItem.ttsAudioManager.delegate = self
   }
 
   override func layoutSubviews() {
@@ -184,18 +207,41 @@ private class ContextSentenceModelCell: AttributedModelCell, AVSpeechSynthesizer
       self.blurredOverlay.alpha = 0
     }
   }
+}
 
-  func speechSynthesizer(_: AVSpeechSynthesizer, didStart _: AVSpeechUtterance) {
+extension ContextSentenceModelCell: TTSAudioManagerDelegate, AVSpeechSynthesizerDelegate,
+                                    VoicevoxClientDelegate {
+  func ttsAudioManagerDidBeginTTSRetrieve() {
+    rightButton?.setImage(Asset.baselineCloudDownloadBlack24pt.image, for: .normal)
+  }
+
+  func ttsAudioManagerDidFinishTTSRetrieve() {
+    // noop
+  }
+
+  func ttsAudioManagerDidStartPlaying() {
     rightButton?.setImage(Asset.baselineStopBlack24pt.image, for: .normal)
   }
 
-  func speechSynthesizer(_: AVSpeechSynthesizer, didFinish _: AVSpeechUtterance) {
-    rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
+  func ttsAudioManagerDidPausePlaying() {
+    // noop
   }
 
-  func speechSynthesizer(_: AVSpeechSynthesizer, didCancel _: AVSpeechUtterance) {
+  func ttsAudioManagerDidFinishPlaying() {
     rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
-  }
+  }    
+    
+    func speechSynthesizer(_: AVSpeechSynthesizer, didStart _: AVSpeechUtterance) {
+      rightButton?.setImage(Asset.baselineStopBlack24pt.image, for: .normal)
+    }
+
+    func speechSynthesizer(_: AVSpeechSynthesizer, didFinish _: AVSpeechUtterance) {
+      rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
+    }
+
+    func speechSynthesizer(_: AVSpeechSynthesizer, didCancel _: AVSpeechUtterance) {
+      rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
+    }
 
   func voicevoxClientDidStartFetching() {
     rightButton?.isEnabled = false
