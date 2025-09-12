@@ -187,10 +187,11 @@ class AITutorSettingsViewController: UITableViewController, TKMViewController {
 
   init() {
     super.init(style: .insetGrouped)
-    self.title = "AI Tutor"
+    title = "AI Tutor"
   }
 
-  required init?(coder: NSCoder) {
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 

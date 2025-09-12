@@ -168,10 +168,11 @@ class VoicevoxSettingsViewController: UITableViewController, TKMViewController {
 
   init() {
     super.init(style: .insetGrouped)
-    self.title = "Voicevox"
+    title = "Voicevox"
   }
 
-  required init?(coder: NSCoder) {
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
