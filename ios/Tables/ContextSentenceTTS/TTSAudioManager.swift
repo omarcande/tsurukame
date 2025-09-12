@@ -16,34 +16,31 @@ import AVFoundation
 import Foundation
 
 protocol TTSAudioManagerDelegate: AnyObject {
-  func ttsAudioManagerDidBeginTTSRetrieve() // start download
-  func ttsAudioManagerDidFinishTTSRetrieve() // download finished
-  func ttsAudioManagerDidStartPlaying() // playing audio
-  func ttsAudioManagerDidPausePlaying() // paused audio
-  func ttsAudioManagerDidFinishPlaying() // stop audio
+  func ttsAudioManagerDidBeginTTSRetrieve()
+  func ttsAudioManagerDidFinishTTSRetrieve()
+  func ttsAudioManagerDidStartPlaying()
+  func ttsAudioManagerDidPausePlaying()
+  func ttsAudioManagerDidFinishPlaying()
 }
 
 class TTSAudioManager: NSObject {
-  private let baseURLString: String = "https://tts-api.netlify.app/?"
-  private let langURLString: String = "&lang=ja"
-  private let textURLString: String = "&text="
+  private let baseURLString = "https://tts-api.netlify.app/?"
+  private let langURLString = "&lang=ja"
+  private let textURLString = "&text="
 
   private var avPlayer: AVPlayer?
+  private var observedPlayer: AVPlayer? // ✅ Added this line
+  private var timeObserverToken: Any?
+  private var isStartingPlayback = false // Optional debounce flag
 
   var delegate: TTSAudioManagerDelegate?
 
   var isPlaying: Bool {
-    guard let avPlayer = avPlayer else {
-      return false
-    }
-
-    return avPlayer.timeControlStatus != .playing
+    avPlayer?.timeControlStatus == .playing
   }
 
   func stop() {
-    guard let avPlayer = avPlayer else {
-      return
-    }
+    guard let avPlayer = avPlayer else { return }
 
     if avPlayer.timeControlStatus == .playing {
       avPlayer.pause()
@@ -61,8 +58,8 @@ class TTSAudioManager: NSObject {
       print("Error: text could not be URL encoded")
       throw URLError(.unsupportedURL)
     }
-    let urlString = baseURLString + langURLString + textURLString + encodedText
 
+    let urlString = baseURLString + langURLString + textURLString + encodedText
     print("URL: \(urlString)")
 
     guard let finalURL = URL(string: urlString) else {
@@ -71,7 +68,6 @@ class TTSAudioManager: NSObject {
     }
 
     let request = makeRequest(url: finalURL, method: "GET")
-
     let (data, resp) = try await URLSession.shared.data(for: request)
 
     Task { @MainActor in
@@ -92,78 +88,83 @@ class TTSAudioManager: NSObject {
   }
 
   func playAudio(from data: TranslatedVoiceData) {
-    if let avPlayer = avPlayer {
-      guard avPlayer.timeControlStatus != .playing else {
-        avPlayer.pause()
-        avPlayer.seek(to: CMTime(seconds: 0, preferredTimescale: 1))
-        return
-      }
+    guard !isStartingPlayback else { return }
+    isStartingPlayback = true
 
-      avPlayer.removeObserver(self, forKeyPath: KeyPathDefaults.timeControlStatus.rawValue)
+    // Stop existing playback
+    if avPlayer?.timeControlStatus == .playing {
+      avPlayer?.pause()
+      avPlayer?.seek(to: .zero)
     }
 
-    var finalURL: URL!
+    // Remove observers before replacing the player
+    removePlayerObservers()
 
     var docsURL = AudioFileWriter.baseURL
     let fileName = data.URL.absoluteString
     docsURL.appendPathComponent(fileName)
 
-    finalURL = docsURL
-
-    let asset = AVURLAsset(url: finalURL)
+    let asset = AVURLAsset(url: docsURL)
     let playerItem = AVPlayerItem(asset: asset)
 
-    avPlayer = AVPlayer(playerItem: playerItem)
-    avPlayer?.addObserver(self, forKeyPath: "timeControlStatus", options: [.old, .new],
-                          context: nil)
-    avPlayer?.play()
+    let newPlayer = AVPlayer(playerItem: playerItem)
+    avPlayer = newPlayer
+
+    addPlayerObservers()
+    newPlayer.play()
+
+    // Reset debounce flag after short delay
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+      self.isStartingPlayback = false
+    }
   }
 
   deinit {
-    if let avPlayer = avPlayer {
-      avPlayer.removeObserver(self, forKeyPath: KeyPathDefaults.timeControlStatus.rawValue)
-    }
-  }
-}
-
-private extension TTSAudioManager {
-  func prepareAudioSession() {
-    do {
-      try AVAudioSession.sharedInstance().setCategory(.playback)
-    } catch {
-      print("Error configuring AVAudioSession: \(error.localizedDescription)")
-    }
+    removePlayerObservers()
   }
 
-  func makeRequest(url: URL, method: String) -> URLRequest {
+  private func addPlayerObservers() {
+    guard let avPlayer = avPlayer else { return }
+
+    NotificationCenter.default.addObserver(self,
+                                           selector: #selector(playerDidFinishPlaying),
+                                           name: .AVPlayerItemDidPlayToEndTime,
+                                           object: avPlayer.currentItem)
+
+    timeObserverToken = avPlayer.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.5,
+                                                                             preferredTimescale: CMTimeScale(NSEC_PER_SEC)),
+                                                         queue: .main) { [weak self] _ in
+      guard let self = self else { return }
+      switch avPlayer.timeControlStatus {
+      case .playing:
+        self.delegate?.ttsAudioManagerDidStartPlaying()
+      case .paused:
+        self.delegate?.ttsAudioManagerDidPausePlaying()
+      default:
+        break
+      }
+    }
+
+    observedPlayer = avPlayer
+  }
+
+  private func removePlayerObservers() {
+    if let player = observedPlayer, let token = timeObserverToken {
+      player.removeTimeObserver(token)
+      timeObserverToken = nil
+      observedPlayer = nil
+    }
+
+    NotificationCenter.default.removeObserver(self)
+  }
+
+  @objc private func playerDidFinishPlaying() {
+    delegate?.ttsAudioManagerDidFinishPlaying()
+  }
+
+  private func makeRequest(url: URL, method: String) -> URLRequest {
     var req = URLRequest(url: url)
     req.httpMethod = method
     return req
-  }
-}
-
-extension TTSAudioManager {
-  override func observeValue(forKeyPath keyPath: String?, of object: Any?,
-                             change _: [NSKeyValueChangeKey: Any]?,
-                             context _: UnsafeMutableRawPointer?) {
-    guard let avPlayer = avPlayer, object as? AnyObject === avPlayer else {
-      return
-    }
-
-    if keyPath == KeyPathDefaults.timeControlStatus.rawValue {
-      switch avPlayer.timeControlStatus {
-      case .playing:
-        print("AVPlayer: playing")
-        delegate?.ttsAudioManagerDidStartPlaying()
-      case .paused:
-        print("AVPlayer: paused")
-        delegate?.ttsAudioManagerDidPausePlaying()
-        delegate?.ttsAudioManagerDidFinishPlaying()
-      case .waitingToPlayAtSpecifiedRate:
-        print("AVPlayer: waiting to play")
-      @unknown default:
-        print("AVPlayer: unknown future state")
-      }
-    }
   }
 }

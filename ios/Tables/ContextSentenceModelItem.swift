@@ -104,13 +104,13 @@ class ContextSentenceModelItem: AttributedModelItem {
           .retrieveAudio(for: japaneseText.string)
         else {
           print("Error: Voice audio not available")
-            fallbackToAVSpeechSynthesizer()
+          fallbackToAVSpeechSynthesizer()
           return
         }
         ttsAudioManager.playAudio(from: voiceData)
       } catch {
         print("Error: \(error)")
-          fallbackToAVSpeechSynthesizer()
+        fallbackToAVSpeechSynthesizer()
       }
     }
   }
@@ -154,9 +154,18 @@ private class ContextSentenceModelCell: AttributedModelCell {
     super.update()
 
     blurredOverlay.alpha = contextSentenceItem.blurred ? 1 : 0
-    contextSentenceItem.speechSynthesizer.delegate = self
-    contextSentenceItem.voicevox.delegate = self
-    contextSentenceItem.ttsAudioManager.delegate = self
+
+    if contextSentenceItem.speechSynthesizer.delegate !== self {
+      contextSentenceItem.speechSynthesizer.delegate = self
+    }
+
+    if contextSentenceItem.voicevox.delegate !== self {
+      contextSentenceItem.voicevox.delegate = self
+    }
+
+    if contextSentenceItem.ttsAudioManager.delegate !== self {
+      contextSentenceItem.ttsAudioManager.delegate = self
+    }
   }
 
   override func layoutSubviews() {
@@ -210,7 +219,7 @@ private class ContextSentenceModelCell: AttributedModelCell {
 }
 
 extension ContextSentenceModelCell: TTSAudioManagerDelegate, AVSpeechSynthesizerDelegate,
-                                    VoicevoxClientDelegate {
+  VoicevoxClientDelegate {
   func ttsAudioManagerDidBeginTTSRetrieve() {
     rightButton?.setImage(Asset.baselineCloudDownloadBlack24pt.image, for: .normal)
   }
@@ -229,19 +238,19 @@ extension ContextSentenceModelCell: TTSAudioManagerDelegate, AVSpeechSynthesizer
 
   func ttsAudioManagerDidFinishPlaying() {
     rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
-  }    
-    
-    func speechSynthesizer(_: AVSpeechSynthesizer, didStart _: AVSpeechUtterance) {
-      rightButton?.setImage(Asset.baselineStopBlack24pt.image, for: .normal)
-    }
+  }
 
-    func speechSynthesizer(_: AVSpeechSynthesizer, didFinish _: AVSpeechUtterance) {
-      rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
-    }
+  func speechSynthesizer(_: AVSpeechSynthesizer, didStart _: AVSpeechUtterance) {
+    rightButton?.setImage(Asset.baselineStopBlack24pt.image, for: .normal)
+  }
 
-    func speechSynthesizer(_: AVSpeechSynthesizer, didCancel _: AVSpeechUtterance) {
-      rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
-    }
+  func speechSynthesizer(_: AVSpeechSynthesizer, didFinish _: AVSpeechUtterance) {
+    rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
+  }
+
+  func speechSynthesizer(_: AVSpeechSynthesizer, didCancel _: AVSpeechUtterance) {
+    rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
+  }
 
   func voicevoxClientDidStartFetching() {
     rightButton?.isEnabled = false
