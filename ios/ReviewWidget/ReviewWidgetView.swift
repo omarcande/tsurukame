@@ -50,7 +50,10 @@ struct ReviewWidgetView: View {
     let kanjiGradient = [kanjiColor1, kanjiColor2]
     let vocabularyGradient = [vocabularyColor1, vocabularyColor2]
 
-      let darkGradient = [Color(red: 60 / 255, green: 60 / 255, blue: 75 / 255), Color(red: 28 / 255, green: 28 / 255, blue: 30 / 255)]
+    let darkGradient = [
+      Color(red: 60 / 255, green: 60 / 255, blue: 75 / 255),
+      Color(red: 28 / 255, green: 28 / 255, blue: 30 / 255),
+    ]
 
     let gradient = switch entry.reviewItem?.type {
     case "Radical":
@@ -92,7 +95,7 @@ struct ReviewWidgetView: View {
       LinearGradient(gradient: Gradient(colors: self
                        .colorScheme == .dark ? darkGradient : gradient),
       startPoint: .top,
-                     endPoint: .bottomTrailing)
+      endPoint: .bottomTrailing)
     }
   }
 }
