@@ -100,6 +100,11 @@ struct AITutorView: View {
       .task {
         await viewModel.fetchResponse()
       }
+      .alert("Missing API Key", isPresented: $viewModel.isShowingAPIKeyAlert) {
+        Button("OK", role: .cancel) {}
+      } message: {
+        Text("Please enter a Gemini API Key on Settings.")
+      }
     }
   }
 
@@ -128,6 +133,7 @@ struct AITutorView: View {
 class AITutorViewModel: ObservableObject {
   @Published var responseText: String?
   @Published var isLoading = false
+  @Published var isShowingAPIKeyAlert = false
   private let sentence: String
 
   // MARK: - Prompt Components
@@ -195,8 +201,11 @@ class AITutorViewModel: ObservableObject {
 
   // Renamed from fetchFromGeminiStreamed to reflect non-streaming
   private func fetchFromGemini(sentence: String) async throws {
-    let geminiAPIKey =
-      "" // Secure this key in production!
+    let geminiAPIKey = Settings.geminiAPIKey
+    if geminiAPIKey.isEmpty {
+      isShowingAPIKeyAlert = true
+      return
+    }
 
     // Changed endpoint from :streamGenerateContent to :generateContent
     guard let url =

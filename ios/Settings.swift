@@ -221,6 +221,9 @@ protocol SettingProtocol {
 
   @Setting("", #keyPath(gravatarCustomEmail)) static var gravatarCustomEmail: String
 
+  @Setting("", "voicevoxURL") static var voicevoxURL: String
+  @Setting("", #keyPath(geminiAPIKey)) static var geminiAPIKey: String
+
   @Setting(true, #keyPath(animateParticleExplosion)) static var animateParticleExplosion: Bool
   @Setting(true, #keyPath(animateLevelUpPopup)) static var animateLevelUpPopup: Bool
   @Setting(true, #keyPath(animatePlusOne)) static var animatePlusOne: Bool
