@@ -21,6 +21,19 @@ import WaniKaniAPI
 private let kBlurKernelSize: CGFloat = 19
 private let kBlurAlpha: CGFloat = 0.75
 private let kRevealDuration: TimeInterval = 0.2
+private let kRightMarginTextView: CGFloat = 54.0
+
+enum RightButtonImageStyle: String {
+  case downloading = "icloud.and.arrow.down"
+  case stop = "stop.fill"
+  case moreInfo = "info.bubble.fill"
+  case play = "speaker.wave.2.bubble.fill"
+  case ai = "sparkles"
+
+  var image: UIImage? {
+    UIImage(systemName: rawValue)
+  }
+}
 
 class ContextSentenceModelItem: AttributedModelItem {
   let japaneseText: NSAttributedString
@@ -63,13 +76,7 @@ class ContextSentenceModelItem: AttributedModelItem {
   }
 
   func initReader() {
-    rightButtonImage = Asset.baselineVolumeUpBlack24pt.image
-    rightButtonCallback = { [unowned self] (_: AttributedModelCell) in
-      self.readContextSentence()
-    }
-    rightButtonLongPressCallback = { [unowned self] (_: AttributedModelCell) in
-      self.presentAITutor(with: japaneseText.string)
-    }
+    rightButtonImage = RightButtonImageStyle.moreInfo.image
   }
 
   func presentAITutor(with sentence: String) {
@@ -83,6 +90,20 @@ class ContextSentenceModelItem: AttributedModelItem {
     topVC.present(hostingController, animated: true, completion: nil)
   }
 
+  func stopAudio() {
+    if speechSynthesizer.isSpeaking {
+      speechSynthesizer.stopSpeaking(at: .immediate)
+    }
+
+    if ttsAudioManager.isPlaying {
+      ttsAudioManager.stop()
+    }
+
+    if voicevox.isPlaying() {
+      voicevox.stopPlayback()
+    }
+  }
+
   private func fallbackToAVSpeechSynthesizer() {
     if speechSynthesizer.isSpeaking {
       speechSynthesizer.stopSpeaking(at: .immediate)
@@ -93,7 +114,7 @@ class ContextSentenceModelItem: AttributedModelItem {
     }
   }
 
-  @objc private func readSentenceWithGoogleTTS() {
+  private func readSentenceWithGoogleTTS() {
     if ttsAudioManager.isPlaying {
       ttsAudioManager.stop()
     }
@@ -115,7 +136,7 @@ class ContextSentenceModelItem: AttributedModelItem {
     }
   }
 
-  @objc private func readContextSentence() {
+  func readContextSentence() {
     if voicevox.isPlaying() {
       voicevox.stopPlayback()
     } else {
@@ -143,6 +164,8 @@ private class ContextSentenceModelCell: AttributedModelCell {
 
   var blurredOverlay: UIView!
 
+  override var canBecomeFirstResponder: Bool { true }
+
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -152,6 +175,8 @@ private class ContextSentenceModelCell: AttributedModelCell {
 
   override func update() {
     super.update()
+
+    setupRightButtonMenuActions()
 
     blurredOverlay.alpha = contextSentenceItem.blurred ? 1 : 0
 
@@ -170,6 +195,10 @@ private class ContextSentenceModelCell: AttributedModelCell {
 
   override func layoutSubviews() {
     super.layoutSubviews()
+
+    // since we're adding a context button to the right side of the cell, we need to adjust the
+    // textView size to give the button space
+    textView.frame.size.width = contentView.bounds.size.width - kRightMarginTextView
 
     let rect = contentView.bounds
     let size = rect.size
@@ -216,12 +245,52 @@ private class ContextSentenceModelCell: AttributedModelCell {
       self.blurredOverlay.alpha = 0
     }
   }
+
+  func setupRightButtonMenuActions() {
+    let customMenu = UIMenu(title: "", options: [.displayInline], children: [
+      UIAction(title: "Play Sentence Audio",
+               image: RightButtonImageStyle.play.image) { [unowned self] _ in
+        let item = contextSentenceItem
+        item.readContextSentence()
+      },
+      UIAction(title: "Show AI Tutor",
+               image: RightButtonImageStyle.ai.image) { [unowned self] _ in
+        let item = self.contextSentenceItem
+        let text = item.japaneseText.string
+        item.presentAITutor(with: text)
+      },
+    ])
+
+    // replace original button action
+    rightButton?.removeTarget(self, action: nil,
+                              for: .touchUpInside)
+
+    rightButton?.menu = customMenu
+    rightButton?.showsMenuAsPrimaryAction = true
+    rightButton?.setTitle(nil, for: .normal)
+    rightButton?.setImage(RightButtonImageStyle.moreInfo.image, for: .normal)
+  }
+
+  @objc func stopAudio() {
+    contextSentenceItem.stopAudio()
+    setupRightButtonMenuActions()
+  }
+
+  func replaceRightButtonActionStop() {
+    rightButton?.showsMenuAsPrimaryAction = false
+    rightButton?.addTarget(self, action: #selector(stopAudio), for: .touchUpInside)
+  }
 }
 
 extension ContextSentenceModelCell: TTSAudioManagerDelegate, AVSpeechSynthesizerDelegate,
   VoicevoxClientDelegate {
+  func setRightButtonImage(to style: RightButtonImageStyle) {
+    rightButton?.setImage(style.image, for: .normal)
+  }
+
   func ttsAudioManagerDidBeginTTSRetrieve() {
-    rightButton?.setImage(Asset.baselineCloudDownloadBlack24pt.image, for: .normal)
+    setRightButtonImage(to: .downloading)
+    rightButton?.isEnabled = false
   }
 
   func ttsAudioManagerDidFinishTTSRetrieve() {
@@ -229,7 +298,9 @@ extension ContextSentenceModelCell: TTSAudioManagerDelegate, AVSpeechSynthesizer
   }
 
   func ttsAudioManagerDidStartPlaying() {
-    rightButton?.setImage(Asset.baselineStopBlack24pt.image, for: .normal)
+    setRightButtonImage(to: .stop)
+    rightButton?.isEnabled = true
+    replaceRightButtonActionStop()
   }
 
   func ttsAudioManagerDidPausePlaying() {
@@ -237,19 +308,23 @@ extension ContextSentenceModelCell: TTSAudioManagerDelegate, AVSpeechSynthesizer
   }
 
   func ttsAudioManagerDidFinishPlaying() {
-    rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
+    setRightButtonImage(to: .moreInfo)
+    setupRightButtonMenuActions()
   }
 
   func speechSynthesizer(_: AVSpeechSynthesizer, didStart _: AVSpeechUtterance) {
-    rightButton?.setImage(Asset.baselineStopBlack24pt.image, for: .normal)
+    setRightButtonImage(to: .stop)
+    replaceRightButtonActionStop()
   }
 
   func speechSynthesizer(_: AVSpeechSynthesizer, didFinish _: AVSpeechUtterance) {
-    rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
+    setRightButtonImage(to: .moreInfo)
+    setupRightButtonMenuActions()
   }
 
   func speechSynthesizer(_: AVSpeechSynthesizer, didCancel _: AVSpeechUtterance) {
-    rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
+    setRightButtonImage(to: .moreInfo)
+    setupRightButtonMenuActions()
   }
 
   func voicevoxClientDidStartFetching() {
@@ -258,16 +333,19 @@ extension ContextSentenceModelCell: TTSAudioManagerDelegate, AVSpeechSynthesizer
 
   func voicevoxClientDidStartPlaying() {
     rightButton?.isEnabled = true
-    rightButton?.setImage(Asset.baselineStopBlack24pt.image, for: .normal)
+    setRightButtonImage(to: .stop)
+    replaceRightButtonActionStop()
   }
 
   func voicevoxClientDidFinishPlaying() {
     rightButton?.isEnabled = true
-    rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
+    setRightButtonImage(to: .moreInfo)
+    setupRightButtonMenuActions()
   }
 
   func voicevoxClientDidThrowError() {
     rightButton?.isEnabled = true
-    rightButton?.setImage(Asset.baselineVolumeUpBlack24pt.image, for: .normal)
+    setRightButtonImage(to: .moreInfo)
+    setupRightButtonMenuActions()
   }
 }
