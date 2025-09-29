@@ -81,8 +81,8 @@ struct AITutorView: View {
             dismiss()
           } label: {
             HStack {
-              Image(systemName: "chevron.left")
-              Text("Back")
+              Image(systemName: "chevron.down")
+              Text("Close")
             }
             .foregroundColor(.white) // White color for the back button
           }
