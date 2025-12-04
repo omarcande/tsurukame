@@ -104,6 +104,8 @@ class TTSAudioManager: NSObject {
     let fileName = data.URL.absoluteString
     docsURL.appendPathComponent(fileName)
 
+    configureAudioSession()
+
     let asset = AVURLAsset(url: docsURL)
     let playerItem = AVPlayerItem(asset: asset)
 
@@ -116,6 +118,16 @@ class TTSAudioManager: NSObject {
     // Reset debounce flag after short delay
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
       self.isStartingPlayback = false
+    }
+  }
+
+  func configureAudioSession() {
+    let audioSession = AVAudioSession.sharedInstance()
+    do {
+      // Set the audio session category and mode.
+      try audioSession.setCategory(.playback, options: .duckOthers)
+    } catch {
+      print("Failed to set the audio session configuration")
     }
   }
 
