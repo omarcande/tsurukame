@@ -47,6 +47,8 @@ class TTSAudioManager: NSObject {
     }
 
     avPlayer.seek(to: CMTime(seconds: 0, preferredTimescale: 1))
+
+    deactivateSessionAudio()
   }
 
   func retrieveAudio(for text: String) async throws -> TranslatedVoiceData? {
@@ -128,6 +130,15 @@ class TTSAudioManager: NSObject {
       try audioSession.setCategory(.playback, options: .duckOthers)
     } catch {
       print("Failed to set the audio session configuration")
+    }
+  }
+
+  func deactivateSessionAudio() {
+    let session = AVAudioSession.sharedInstance()
+    do {
+      try session.setActive(false, options: .notifyOthersOnDeactivation)
+    } catch {
+      print("Failed to deactivate audio session: \(error.localizedDescription)")
     }
   }
 
