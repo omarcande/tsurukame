@@ -315,7 +315,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     @unknown default:
       return nil
     }
-    return nil
   }
 
   func templateForLevel(_ complication: CLKComplication,
@@ -430,7 +429,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         .gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: tsurukameHighlightColor,
                                                 fillFraction: fillFraction)
       return template
-    default:
+    @unknown default:
       return nil
     }
   }
