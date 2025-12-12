@@ -197,6 +197,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
       let template = CLKComplicationTemplateExtraLargeStackText()
       template.line1TextProvider = CLKTextProvider(format: "REVIEWS")
       template.line2TextProvider = CLKTextProvider(format: "%d", reviewsPending)
+      return template
     case .modularSmall:
       if reviewsPending > 0 {
         let template = CLKComplicationTemplateModularSmallStackText()
