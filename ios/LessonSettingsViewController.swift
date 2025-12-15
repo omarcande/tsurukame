@@ -66,6 +66,13 @@ class LessonSettingsViewController: UITableViewController, TKMViewController {
         [unowned self] in
         self.showKanaOnlyVocabChanged($0)
       })
+    model.add(SwitchModelItem(style: .subtitle,
+                              title: "Allow excluding vocabulary items",
+                              subtitle: "Allow excluding vocabulary items from lessons, reviews, etc.",
+                              on: Settings.allowExcludeItems) {
+        [unowned self] in
+        self.allowExcludeVocabChanged($0)
+      })
 
     self.model = model
     model.reloadTable()
@@ -100,6 +107,10 @@ class LessonSettingsViewController: UITableViewController, TKMViewController {
     Settings.showKanaOnlyVocab = switchView.isOn
   }
 
+  private func allowExcludeVocabChanged(_ switchView: UISwitch) {
+    Settings.allowExcludeItems = switchView.isOn
+  }
+
   // MARK: - Tap handlers
 
   private func didTapLessonOrder() {
@@ -121,7 +132,9 @@ func makeLessonBatchSizeViewController() -> UIViewController {
                                            title: "Lesson Batch Size",
                                            helpText: "Set the number of new lessons to be " +
                                              "introduced before the quiz session.")
-  vc.addChoicesFromRange(3 ... 10, suffix: " lessons")
+  vc.addChoice(name: "1 lesson", value: 1)
+  vc.addChoicesFromRange(2 ... 10, suffix: " lessons")
+
   return vc
 }
 

@@ -49,6 +49,8 @@ private func postNotificationOnMainQueue(_ notification: Notification.Name) {
 }
 
 class LocalCachingClient: NSObject, SubjectLevelGetter {
+  let excludedText = "#tsurukameExclude"
+
   let client: WaniKaniAPIClient
   let reachability: Reachability
 
@@ -194,7 +196,7 @@ class LocalCachingClient: NSObject, SubjectLevelGetter {
     }
 
     let showKanaOnlyVocab = Settings.showKanaOnlyVocab
-    for assignment in getAllAssignments() {
+    for assignment in getNonExcludedAssignments() {
       // Don't count assignments with invalid subjects.  This includes assignments for levels higher
       // than the user's max subscription level.
       if !isValid(subjectId: assignment.subjectID) {
@@ -426,6 +428,61 @@ class LocalCachingClient: NSObject, SubjectLevelGetter {
     }
   }
 
+  func isExcluded(studyMaterials: TKMStudyMaterials) -> Bool {
+    studyMaterials.meaningNote.contains(excludedText)
+  }
+
+  func getMeaningNoteDisplay(studyMaterials: TKMStudyMaterials) -> String {
+    studyMaterials.meaningNote.replacingOccurrences(of: excludedText, with: "")
+      .trimmingCharacters(in: .whitespacesAndNewlines)
+  }
+
+  func setExcluded(studyMaterials: inout TKMStudyMaterials,
+                   shouldExclude: Bool) -> Promise<Void> {
+    if shouldExclude {
+      studyMaterials.meaningNote = studyMaterials.meaningNote.appending("\n\(excludedText)")
+        .trimmingCharacters(in: .whitespacesAndNewlines)
+    } else {
+      studyMaterials.meaningNote = getMeaningNoteDisplay(studyMaterials: studyMaterials)
+    }
+    return updateStudyMaterial(studyMaterials)
+  }
+
+  func makeMeaningNote(studyMaterials: TKMStudyMaterials,
+                       note: String) -> String {
+    let excluded = isExcluded(studyMaterials: studyMaterials)
+    return excluded ? note.appending(excludedText) : note
+  }
+
+  func getExcludedAssignments() -> [TKMAssignment] {
+    getAllAssignments().filter { assignment in
+      if assignment.subjectType != .vocabulary {
+        return false
+      }
+      if let activeStudyMaterials = getStudyMaterial(subjectId: assignment.subjectID) {
+        return isExcluded(studyMaterials: activeStudyMaterials)
+      }
+      return false
+    }
+  }
+
+  func excludedCount() -> Int {
+    getExcludedAssignments().count
+  }
+
+  func getNonExcludedAssignments() -> [TKMAssignment] {
+    getAllAssignments().filter { assignment in
+      if assignment.subjectType != .vocabulary {
+        return true
+      }
+      if Settings.allowExcludeItems,
+         let activeStudyMaterials = getStudyMaterial(subjectId: assignment.subjectID) {
+        return !isExcluded(studyMaterials: activeStudyMaterials)
+      }
+      return true
+    }
+  }
+
   func getAllRecentMistakeAssignments() -> [TKMAssignment] {
     db.inDatabase { db in
       getAllRecentMistakeAssignments(transaction: db)
@@ -651,8 +708,7 @@ class LocalCachingClient: NSObject, SubjectLevelGetter {
     }
 
     // Add fake assignments for any other subjects at this level that don't have assignments yet
-    // (the
-    // user hasn't unlocked the prerequisite radicals/kanji).
+    // (the user hasn't unlocked the prerequisite radicals/kanji).
     let subjectsByLevel = getSubjects(byLevel: level, transaction: db)
     addFakeAssignments(to: &ret, subjectIds: subjectsByLevel.radicals, type: .radical,
                        level: level, excludeSubjectIds: subjectIds)
@@ -1427,7 +1483,7 @@ class LocalCachingClient: NSObject, SubjectLevelGetter {
             db
               .mustExecuteUpdate("UPDATE subject_progress SET last_mistake_time = ? WHERE id = ?",
                                  args: [
-                                   item.value,
+                                   self.dateFormatter.string(from: item.value),
                                    item.key,
                                  ])
           }

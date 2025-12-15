@@ -197,6 +197,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
       let template = CLKComplicationTemplateExtraLargeStackText()
       template.line1TextProvider = CLKTextProvider(format: "REVIEWS")
       template.line2TextProvider = CLKTextProvider(format: "%d", reviewsPending)
+      return template
     case .modularSmall:
       if reviewsPending > 0 {
         let template = CLKComplicationTemplateModularSmallStackText()
@@ -315,7 +316,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     @unknown default:
       return nil
     }
-    return nil
   }
 
   func templateForLevel(_ complication: CLKComplication,
@@ -430,7 +430,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         .gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: tsurukameHighlightColor,
                                                 fillFraction: fillFraction)
       return template
-    default:
+    @unknown default:
       return nil
     }
   }

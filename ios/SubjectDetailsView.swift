@@ -173,6 +173,26 @@ class SubjectDetailsView: UITableView, SubjectChipDelegate {
     studyMaterialsChanged = false
   }
 
+  // Note: as there is only one option right now, this function is not called if
+  // Settings.allowExcludeItems is false
+  private func addOptions(_: TKMSubject,
+                          studyMaterials _: TKMStudyMaterials?,
+                          toModel model: MutableTableModel) -> IndexPath? {
+    let sectionIndexPath = model.add(section: "Options")
+    let isExcluded = services.localCachingClient.isExcluded(studyMaterials: studyMaterials)
+
+    model.add(SwitchModelItem(style: .subtitle,
+                              title: "Exclude this item",
+                              subtitle: "Excluded items do not appear in lessons or reviews.\nYou can exclude items that you are not interesting in learning.",
+                              on: isExcluded) { [unowned self] in
+        let exclude = $0.isOn
+        _ = services.localCachingClient.setExcluded(studyMaterials: &studyMaterials,
+                                                    shouldExclude: exclude)
+      })
+
+    return sectionIndexPath
+  }
+
   private func addMeanings(_ subject: TKMSubject,
                            studyMaterials: TKMStudyMaterials?,
                            toModel model: MutableTableModel) -> IndexPath? {
@@ -290,22 +310,36 @@ class SubjectDetailsView: UITableView, SubjectChipDelegate {
 
   private func addSimilarKanji(_ subject: TKMSubject, toModel model: MutableTableModel) {
     let currentLevel = services.localCachingClient!.getUserInfo()!.level
-    var addedSection = false
+    var encounteredIds = [Int64]()
+    var modelItems = [SubjectModelItem]()
+    for kanjiId in subject.kanji.visuallySimilarKanjiIds {
+      guard let subject = services.localCachingClient.getSubject(id: kanjiId) else {
+        continue
+      }
+      if encounteredIds.contains(subject.id) ||
+        (!Settings.showSimilarKanjiAboveLevel && subject.level > currentLevel) {
+        continue
+      }
+      encounteredIds.append(subject.id)
+      modelItems.append(SubjectModelItem(subject: subject, delegate: subjectDelegate))
+    }
     for similar in subject.kanji.visuallySimilarKanji {
       guard let subject = services.localCachingClient.getSubject(japanese: String(similar),
                                                                  type: .kanji) else {
         continue
       }
-      if subject.level > currentLevel {
+      if encounteredIds.contains(subject.id) ||
+        (!Settings.showSimilarKanjiAboveLevel && subject.level > currentLevel) {
         continue
       }
-      if !addedSection {
-        model.add(section: "Visually Similar Kanji")
-        addedSection = true
+      encounteredIds.append(subject.id)
+      modelItems.append(SubjectModelItem(subject: subject, delegate: subjectDelegate))
+    }
+    if modelItems.count > 0 {
+      model.add(section: "Visually Similar Kanji")
+      for modelItem in modelItems {
+        model.add(modelItem)
       }
-
-      let item = SubjectModelItem(subject: subject, delegate: subjectDelegate)
-      model.add(item)
     }
   }
 
@@ -505,9 +539,13 @@ class SubjectDetailsView: UITableView, SubjectChipDelegate {
       self.studyMaterials.subjectID = subject.id
     }
 
-    let setMeaningNote = { [weak self] (_ text: String) in
-      self?.studyMaterials.meaningNote = text
-      self?.studyMaterialsChanged = true
+    let setMeaningNote = { [unowned self] (_ text: String) in
+      if self.studyMaterials != nil {
+        self.studyMaterials!.meaningNote = services.localCachingClient
+          .makeMeaningNote(studyMaterials: self.studyMaterials!,
+                           note: text)
+      }
+      self.studyMaterialsChanged = true
     }
     let setReadingNote = { [weak self] (_ text: String) in
       self?.studyMaterials.readingNote = text
@@ -518,12 +556,19 @@ class SubjectDetailsView: UITableView, SubjectChipDelegate {
     let readingAttempted = task?.answeredReading == true || task?.answer.readingWrong == true
     let meaningShown = !isReview || meaningAttempted
     let readingShown = !isReview || readingAttempted
+    let optionsShown = !isReview && subject.subjectType == .vocabulary && Settings
+      .allowExcludeItems
 
+    var meaningNote = ""
+    if studyMaterials != nil {
+      meaningNote = services.localCachingClient
+        .getMeaningNoteDisplay(studyMaterials: studyMaterials!)
+    }
     if subject.hasRadical {
       let meanings = addMeanings(subject, studyMaterials: studyMaterials, toModel: model)
 
       let mnemonic = addExplanation(model: model, title: "Mnemonic", text: subject.radical.mnemonic,
-                                    note: studyMaterials?.meaningNote,
+                                    note: meaningNote,
                                     noteChangedCallback: setMeaningNote)
 
       var oldMnemonic: IndexPath?
@@ -547,7 +592,7 @@ class SubjectDetailsView: UITableView, SubjectChipDelegate {
       let meaningExplanation = addExplanation(model: model, title: "Meaning Explanation",
                                               text: subject.kanji.meaningMnemonic,
                                               hint: subject.kanji.meaningHint,
-                                              note: studyMaterials?.meaningNote,
+                                              note: meaningNote,
                                               noteChangedCallback: setMeaningNote)
       let readingExplanation = addExplanation(model: model, title: "Reading Explanation",
                                               text: subject.kanji.readingMnemonic,
@@ -579,7 +624,7 @@ class SubjectDetailsView: UITableView, SubjectChipDelegate {
 
       let meaningExplanation = addExplanation(model: model, title: "Meaning Explanation",
                                               text: subject.vocabulary.meaningExplanation,
-                                              note: studyMaterials?.meaningNote,
+                                              note: meaningNote,
                                               noteChangedCallback: setMeaningNote)
       let readingExplanation = addExplanation(model: model, title: "Reading Explanation",
                                               text: subject.vocabulary.readingExplanation,
@@ -650,6 +695,10 @@ class SubjectDetailsView: UITableView, SubjectChipDelegate {
        ArtworkManager.contains(subjectID: subject.id) {
       model.add(section: "Artwork by @AmandaBear")
       model.add(ArtworkModelItem(subjectID: subject.id))
+    }
+
+    if optionsShown {
+      _ = addOptions(subject, studyMaterials: studyMaterials, toModel: model)
     }
 
     if FeatureFlags.showSubjectDeveloperOptions {
