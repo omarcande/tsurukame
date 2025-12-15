@@ -1,7 +1,7 @@
 # Use the CDN to make CircleCI builds faster.
 source 'https://cdn.cocoapods.org/'
 
-platform :ios, '12.0'
+platform :ios, '15.0'
 
 target 'FontScreenshotter' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -31,7 +31,7 @@ target 'Tsurukame' do
   target 'Tests' do
     inherit! :search_paths
 
-    platform :ios, '12.0'
+    platform :ios, '15.0'
     pod 'Hippolyte', '~> 1.3.0'
   end
 end
@@ -42,13 +42,14 @@ target 'ReviewWidgetExtension' do
   pod 'FMDB', '~> 2.7.5'
 end
 
-# Delete the IPHONEOS_DEPLOYMENT_TARGET config setting so it inherits the
-# podfile platform setting.
+# Keep post_install light; DO NOT re-enable bitcode.
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
+      # Ensure the deployment target is not forced to some old value
       config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
-      config.build_settings['ENABLE_BITCODE'] = 'YES'
+      # Bitcode has been removed in modern Xcode; do not set ENABLE_BITCODE
+      # Remove any custom framework search paths if you had them here (rare).
     end
   end
 end
