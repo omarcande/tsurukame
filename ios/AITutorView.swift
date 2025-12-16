@@ -13,8 +13,10 @@
 // limitations under the License.
 
 import SwiftUI
+import UIKit
 
 struct AITutorView: View {
+  @State private var didCopyResponse = false
   @StateObject private var viewModel: AITutorViewModel
   @Environment(\.dismiss) private var dismiss
   let sentence: String
@@ -52,22 +54,49 @@ struct AITutorView: View {
             ProgressView()
               .padding()
               .frame(maxWidth: .infinity) // Center the progress view
+
           } else if let response = viewModel.responseText {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 12) {
               Text("AI Tutor's Analysis:")
                 .font(.subheadline)
                 .fontWeight(.medium)
-                .foregroundColor(.gray) // Gray label
+                .foregroundColor(.gray)
+
               Text(convertToAttributedString(response))
-                .font(.body) // Standard body font for the response
-//                .foregroundColor(.black) // Dark text for the response
+                .font(.body)
+
+              Divider()
+                .padding(.top, 4)
+
+              HStack {
+                Spacer()
+                Button {
+                  // Remove markdown
+                  if let attributed = try? AttributedString(markdown: response,
+                                                            options: .init(interpretedSyntax: .inlineOnlyPreservingWhitespace)) {
+                    UIPasteboard.general.string = String(attributed.characters)
+                  } else {
+                    UIPasteboard.general.string = response
+                  }
+
+                  didCopyResponse = true
+                } label: {
+                  Label("Copy", systemImage: "doc.on.doc")
+                    .font(.callout)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 12)
+                    .background(Color(.systemGray6))
+                    .foregroundColor(.primary)
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                }
+                .buttonStyle(.plain)
+              }
             }
-            .padding() // Padding around this section
-            .background(Color(customBackgroundColor)) // White background for the section
-            .cornerRadius(10) // Slightly rounded corners
-            .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0,
-                    y: 2) // Subtle shadow
-            .padding(.horizontal) // Padding from the screen edges
+            .padding()
+            .background(Color(customBackgroundColor))
+            .cornerRadius(10)
+            .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+            .padding(.horizontal)
           }
         }
         .padding(.vertical) // Overall vertical padding for the scroll view content
@@ -104,6 +133,11 @@ struct AITutorView: View {
         Button("OK", role: .cancel) {}
       } message: {
         Text("Please enter a Gemini API Key on Settings.")
+      }
+      .alert("Copied!", isPresented: $didCopyResponse) {
+        Button("OK", role: .cancel) {}
+      } message: {
+        Text("The analysis has been copied to your clipboard.")
       }
     }
   }
