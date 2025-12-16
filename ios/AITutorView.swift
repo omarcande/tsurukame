@@ -21,46 +21,80 @@ struct AITutorView: View {
   @Environment(\.dismiss) private var dismiss
   let sentence: String
 
+  // Existing initializer remains for production use
   init(sentence: String) {
     _viewModel = StateObject(wrappedValue: AITutorViewModel(sentence: sentence))
     self.sentence = sentence
   }
 
+  // New: injectable initializer for previews/tests
+  init(sentence: String, viewModel: AITutorViewModel) {
+    _viewModel = StateObject(wrappedValue: viewModel)
+    self.sentence = sentence
+  }
+
   var body: some View {
+//      let vocabPurple = Color(UIColor { trait in
+//          if trait.userInterfaceStyle == .dark {
+//              // Dark: 0x6100AA
+//              return UIColor(
+//                  red: 97.0/255.0,
+//                  green: 0.0/255.0,
+//                  blue: 170.0/255.0,
+//                  alpha: 1.0
+//              )
+//          } else {
+//              // Light: 0xAA00FF
+//              return UIColor(
+//                  red: 170.0/255.0,
+//                  green: 0.0/255.0,
+//                  blue: 255.0/255.0,
+//                  alpha: 1.0
+//              )
+//          }
+//      })
+
+    let purple = Color(UIColor(red: 97.0 / 255.0,
+                               green: 0.0 / 255.0,
+                               blue: 170.0 / 255.0,
+                               alpha: 1.0))
+
     NavigationStack {
       ScrollView {
-        VStack(alignment: .leading, spacing: 20) { // Increased spacing between sections
-          // Section for the user's input sentence
-          VStack(alignment: .leading, spacing: 8) {
-            // Added a small spacing for internal elements if any
-            Text("Context Sentence:")
-              .font(.subheadline)
-              .fontWeight(.medium)
-              .foregroundColor(.gray) // Gray label
-            Text(sentence)
-              .font(.title2) // Slightly larger font for the main sentence
-              .fontWeight(.semibold)
-//              .foregroundColor(.black) // Clear, dark text for the sentence
-          }
-          .padding() // Padding around this section
-          .background(Color(customBackgroundColor)) // White background for the section
-          .cornerRadius(10) // Slightly rounded corners for the section box
-          .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0,
-                  y: 2) // Subtle shadow
-          .padding(.horizontal) // Padding from the screen edges
+        VStack(alignment: .leading, spacing: 20) {
+          // MARK: Context Sentence card
 
-          // AI Response Section
+          VStack(alignment: .leading, spacing: 8) {
+            Text("Context Sentence:")
+              .font(.headline)
+              .fontWeight(.medium)
+            // .foregroundColor(purple)
+
+            Text(sentence)
+              .font(.title2)
+              .fontWeight(.semibold)
+          }
+          .padding()
+          // Content layer: use standard materials (not Liquid Glass) per HIG
+          // for readability and hierarchy.
+          .background(.ultraThickMaterial)
+          .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+          .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+          .padding(.horizontal)
+
+          // MARK: AI Response card
+
           if viewModel.isLoading {
             ProgressView()
               .padding()
-              .frame(maxWidth: .infinity) // Center the progress view
+              .frame(maxWidth: .infinity)
 
           } else if let response = viewModel.responseText {
             VStack(alignment: .leading, spacing: 12) {
               Text("AI Tutor's Analysis:")
-                .font(.subheadline)
+                .font(.headline)
                 .fontWeight(.medium)
-                .foregroundColor(.gray)
+              // .foregroundColor(.gray)
 
               Text(convertToAttributedString(response))
                 .font(.body)
@@ -78,67 +112,75 @@ struct AITutorView: View {
                   } else {
                     UIPasteboard.general.string = response
                   }
-
                   didCopyResponse = true
                 } label: {
                   Label("Copy", systemImage: "doc.on.doc")
                     .font(.callout)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 12)
-                    .background(Color(.systemGray6))
+                    .background(.regularMaterial)
                     .foregroundColor(.primary)
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                 }
-                .buttonStyle(.plain)
               }
             }
             .padding()
-            .background(Color(customBackgroundColor))
-            .cornerRadius(10)
+            .background(.ultraThickMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
             .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
             .padding(.horizontal)
           }
         }
-        .padding(.vertical) // Overall vertical padding for the scroll view content
+        .padding(.vertical)
       }
-      .background(Color(.systemGroupedBackground)) // A light gray background for the overall view,
-      // matching iOS style
-      .navigationBarTitleDisplayMode(.inline) // Ensure title is in the center
+      .background(Color(purple))
+
+      // MARK: Navigation / Toolbar
+
+      .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
+          // Symbol-forward item; monochrome + white ink on glass.
           Button {
             dismiss()
           } label: {
-            HStack {
-              Image(systemName: "chevron.down")
-              Text("Close")
-            }
-            .foregroundColor(.white) // White color for the back button
+            Image(systemName: "chevron.down")
+              .symbolRenderingMode(.monochrome)
           }
+          .buttonStyle(.plain)
+          .tint(.white) // ensure white ink
+          .contentShape(Rectangle()) // good hit-testing
         }
+
         ToolbarItem(placement: .principal) {
           Text("AI Tutor")
             .font(.headline)
-            .foregroundColor(.white) // White title text
+            .foregroundStyle(.white)
         }
       }
-      .toolbarBackground(Color(red: 0.5, green: 0.0, blue: 0.8),
-                         // A shade of purple for the toolbar, similar to the image
-                         for: .navigationBar)
-      .toolbarBackground(.visible, for: .navigationBar) // Make sure the background is visible
-      .task {
-        await viewModel.fetchResponse()
-      }
-      .alert("Missing API Key", isPresented: $viewModel.isShowingAPIKeyAlert) {
-        Button("OK", role: .cancel) {}
-      } message: {
-        Text("Please enter a Gemini API Key on Settings.")
-      }
-      .alert("Copied!", isPresented: $didCopyResponse) {
-        Button("OK", role: .cancel) {}
-      } message: {
-        Text("The analysis has been copied to your clipboard.")
-      }
+      .toolbarBackground(.visible, for: .navigationBar)
+      .toolbarColorScheme(.dark, for: .navigationBar) // white ink across items
+    }
+
+    // MARK: Tasks & Alerts (unchanged)
+
+    .task {
+      #if DEBUG
+        if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
+          return
+        }
+      #endif
+      await viewModel.fetchResponse()
+    }
+    .alert("Missing API Key", isPresented: $viewModel.isShowingAPIKeyAlert) {
+      Button("OK", role: .cancel) {}
+    } message: {
+      Text("Please enter a Gemini API Key on Settings.")
+    }
+    .alert("Copied!", isPresented: $didCopyResponse) {
+      Button("OK", role: .cancel) {}
+    } message: {
+      Text("The analysis has been copied to your clipboard.")
     }
   }
 
@@ -248,43 +290,17 @@ class AITutorViewModel: ObservableObject {
       throw URLError(.badURL)
     }
 
-    let requestPayload: [String: Any] = [
-      "contents": [
-        // 1. First turn: User provides general instructions
-        [
-          "role": "user",
-          "parts": [
-            ["text": generalInstructions],
-          ],
-        ],
-        // 2. Second turn: User provides the example input
-        [
-          "role": "user",
-          "parts": [
-            ["text": exampleUserInput],
-          ],
-        ],
-        // 3. Third turn: Model provides the example response (few-shot)
-        [
-          "role": "model",
-          "parts": [
-            ["text": exampleAIResponse],
-          ],
-        ],
-        // 4. Fourth turn: User provides the current sentence to be analyzed
-        [
-          "role": "user",
-          "parts": [
-            ["text": sentence],
-          ],
-        ],
-      ],
-      "generationConfig": [
-        "temperature": 0.7,
-      ],
-    ]
+    // --- Build request using typed Encodable structs to avoid type-checker blowups ---
+    let requestBody = GenerateContentRequest(contents: [
+      .init(role: "user", parts: [.init(text: generalInstructions)]),
+      .init(role: "user", parts: [.init(text: exampleUserInput)]),
+      .init(role: "model", parts: [.init(text: exampleAIResponse)]),
+      .init(role: "user", parts: [.init(text: sentence)]),
+    ],
+    generationConfig: .init(temperature: 0.7))
 
-    let jsonData = try JSONSerialization.data(withJSONObject: requestPayload)
+    let jsonData = try JSONEncoder().encode(requestBody)
+
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -321,6 +337,29 @@ class AITutorViewModel: ObservableObject {
       print("Received Data: \(String(data: data, encoding: .utf8) ?? "N/A")")
       throw error // Re-throw the decoding error
     }
+  }
+}
+
+// MARK: - Encodable Structs for Request (fixes preview type-checking)
+
+/// Strongly-typed request body for the Gemini `:generateContent` endpoint.
+/// Using `Encodable` eliminates large `[String: Any]` literals that cause
+/// type-checker performance issues in SwiftUI previews.
+struct GenerateContentRequest: Encodable {
+  var contents: [Content]
+  var generationConfig: GenerationConfig?
+
+  struct Content: Encodable {
+    var role: String
+    var parts: [Part]
+
+    struct Part: Encodable {
+      var text: String
+    }
+  }
+
+  struct GenerationConfig: Encodable {
+    var temperature: Double?
   }
 }
 
@@ -363,4 +402,98 @@ struct GeminiResponse: Decodable {
   //     let category: String
   //     let probability: String
   // }
+}
+
+// MARK: - Preview Support
+
+@MainActor
+final class MockAITutorViewModel: AITutorViewModel {
+  init(sentence: String,
+       responseText: String? = nil,
+       isLoading: Bool = false,
+       showApiKeyAlert: Bool = false) {
+    super.init(sentence: sentence)
+    self.responseText = responseText
+    self.isLoading = isLoading
+    isShowingAPIKeyAlert = showApiKeyAlert
+  }
+
+  override func fetchResponse() async {
+    // no-op in previews
+  }
+}
+
+struct AITutorView_Previews: PreviewProvider {
+  static var sampleSentence: String {
+    "昨日、駅で友達に会って、一緒に晩ごはんを食べました。"
+  }
+
+  static var sampleResponse: String {
+    """
+    **Hiragana:** きのう、えきでともだちにあって、いっしょにばんごはんをたべました。
+    **Romanji:** Kinō, eki de tomodachi ni atte, issho ni bangohan o tabemashita.
+
+    **Translation:**
+    - “Yesterday, I met a friend at the station and we had dinner together.”
+
+    **Breakdown and Explanation:**
+    - **昨日 (きのう / kinō):** yesterday.
+    - **駅 (えき / eki):** station.
+    - **で (de):** location particle (at/in).
+    - **友達 (ともだち / tomodachi):** friend.
+    - **に (ni):** indirect object marker.
+    - **会う (あう / au) → 会って (あって / atte):** te-form of “to meet.”
+    - **一緒に (いっしょに / issho ni):** together.
+    - **晩ごはん (ばんごはん / bangohan):** dinner.
+    - **食べる (たべる / taberu) → 食べました (たべました / tabemashita):** polite past “ate.”
+
+    **Overall Meaning and Nuances:**
+    The sentence conveys a simple past sequence: met a friend at the station, then had dinner together. The te-form links actions naturally.
+    """
+  }
+
+  static var previews: some View {
+    Group {
+      // 1) Loaded – Light
+      NavigationStack {
+        AITutorView(sentence: sampleSentence,
+                    viewModel: MockAITutorViewModel(sentence: sampleSentence,
+                                                    responseText: sampleResponse,
+                                                    isLoading: false))
+      }
+      .previewDisplayName("Loaded – Light")
+      .environment(\.colorScheme, .light)
+
+      // 1b) Loaded – Dark
+      NavigationStack {
+        AITutorView(sentence: sampleSentence,
+                    viewModel: MockAITutorViewModel(sentence: sampleSentence,
+                                                    responseText: sampleResponse,
+                                                    isLoading: false))
+      }
+      .previewDisplayName("Loaded – Dark")
+      .environment(\.colorScheme, .dark)
+
+      // 2) Loading
+      NavigationStack {
+        AITutorView(sentence: sampleSentence,
+                    viewModel: MockAITutorViewModel(sentence: sampleSentence,
+                                                    responseText: nil,
+                                                    isLoading: true))
+      }
+      .previewDisplayName("Loading")
+      .environment(\.colorScheme, .light)
+
+      // 3) Missing API Key (shows the state; alerts don’t present in previews)
+      NavigationStack {
+        AITutorView(sentence: sampleSentence,
+                    viewModel: MockAITutorViewModel(sentence: sampleSentence,
+                                                    responseText: nil,
+                                                    isLoading: false,
+                                                    showApiKeyAlert: true))
+      }
+      .previewDisplayName("Missing API Key")
+      .environment(\.colorScheme, .light)
+    }
+  }
 }

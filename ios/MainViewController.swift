@@ -59,6 +59,12 @@ class MainViewController: UIViewController, LoginViewControllerDelegate,
   override func viewDidLoad() {
     super.viewDidLoad()
 
+    if #available(iOS 13.0, *) {
+      for button in navigationItem.rightBarButtonItems ?? [] {
+        button.tintColor = .label
+      }
+    }
+
     // Create the search results view controller.
     let searchResultsVC = StoryboardScene.SearchResult.initialScene.instantiate()
     searchResultsVC.setup(services: services, delegate: self)
