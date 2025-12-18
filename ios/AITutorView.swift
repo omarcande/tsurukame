@@ -15,6 +15,12 @@
 import SwiftUI
 import UIKit
 
+extension Color {
+  static let charcoalGray = Color("CharcoalGray")
+  static let vocabPurple = Color("VocabPurple")
+  static let vocabPurpleInverted = Color("VocabPurpleInverted")
+}
+
 struct AITutorView: View {
   @State private var didCopyResponse = false
   @StateObject private var viewModel: AITutorViewModel
@@ -34,51 +40,40 @@ struct AITutorView: View {
   }
 
   var body: some View {
-//      let vocabPurple = Color(UIColor { trait in
-//          if trait.userInterfaceStyle == .dark {
-//              // Dark: 0x6100AA
-//              return UIColor(
-//                  red: 97.0/255.0,
-//                  green: 0.0/255.0,
-//                  blue: 170.0/255.0,
-//                  alpha: 1.0
-//              )
-//          } else {
-//              // Light: 0xAA00FF
-//              return UIColor(
-//                  red: 170.0/255.0,
-//                  green: 0.0/255.0,
-//                  blue: 255.0/255.0,
-//                  alpha: 1.0
-//              )
-//          }
-//      })
-
-    let purple = Color(UIColor(red: 97.0 / 255.0,
-                               green: 0.0 / 255.0,
-                               blue: 170.0 / 255.0,
-                               alpha: 1.0))
-
     NavigationStack {
       ScrollView {
         VStack(alignment: .leading, spacing: 20) {
           // MARK: Context Sentence card
 
+//          VStack(alignment: .leading, spacing: 8) {
+//            Text("Context Sentence:")
+//              .font(.headline)
+//              .fontWeight(.medium)
+//
+//            Text(sentence)
+//              .font(.title2)
+//              .fontWeight(.semibold)
+//          }
+//          .padding()
+//          .background(.ultraThickMaterial)
+//          .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+//          .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+//          .padding(.horizontal)
+
           VStack(alignment: .leading, spacing: 8) {
-            Text("Context Sentence:")
-              .font(.headline)
-              .fontWeight(.medium)
-            // .foregroundColor(purple)
+//              Text("Context Sentence:")
+//                .font(.headline)
+//                .fontWeight(.medium)
 
             Text(sentence)
               .font(.title2)
               .fontWeight(.semibold)
+              .foregroundColor(.white)
+              .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
           }
           .padding()
-          // Content layer: use standard materials (not Liquid Glass) per HIG
-          // for readability and hierarchy.
-          .background(.ultraThickMaterial)
-          .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+          // .background(.ultraThinMaterial)
+          // .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
           .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
           .padding(.horizontal)
 
@@ -88,13 +83,14 @@ struct AITutorView: View {
             ProgressView()
               .padding()
               .frame(maxWidth: .infinity)
+              .tint(.white)
 
           } else if let response = viewModel.responseText {
             VStack(alignment: .leading, spacing: 12) {
               Text("AI Tutor's Analysis:")
                 .font(.headline)
                 .fontWeight(.medium)
-              // .foregroundColor(.gray)
+                .foregroundColor(Color.vocabPurpleInverted)
 
               Text(convertToAttributedString(response))
                 .font(.body)
@@ -133,14 +129,13 @@ struct AITutorView: View {
         }
         .padding(.vertical)
       }
-      .background(Color(purple))
+      .background(Color.charcoalGray)
 
       // MARK: Navigation / Toolbar
 
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
-          // Symbol-forward item; monochrome + white ink on glass.
           Button {
             dismiss()
           } label: {
@@ -148,21 +143,32 @@ struct AITutorView: View {
               .symbolRenderingMode(.monochrome)
           }
           .buttonStyle(.plain)
-          .tint(.white) // ensure white ink
-          .contentShape(Rectangle()) // good hit-testing
+          .tint(.white)
         }
 
-        ToolbarItem(placement: .principal) {
-          Text("AI Tutor")
-            .font(.headline)
-            .foregroundStyle(.white)
+//        ToolbarItem(placement: .principal) {
+//          Text("AI Tutor")
+//            .font(.headline)
+//            .foregroundStyle(.white)
+//        }
+
+        ToolbarItem(placement: .navigationBarTrailing) {
+          Button {
+            Task { await viewModel.fetchResponse() }
+          } label: {
+            Image(systemName: "arrow.clockwise")
+              .symbolRenderingMode(.monochrome)
+          }
+          .buttonStyle(.plain)
+          .tint(.white)
+          .disabled(viewModel.isLoading)
         }
       }
       .toolbarBackground(.visible, for: .navigationBar)
-      .toolbarColorScheme(.dark, for: .navigationBar) // white ink across items
+      .toolbarColorScheme(.dark, for: .navigationBar)
     }
 
-    // MARK: Tasks & Alerts (unchanged)
+    // MARK: Tasks & Alerts
 
     .task {
       #if DEBUG
@@ -285,7 +291,7 @@ class AITutorViewModel: ObservableObject {
 
     // Changed endpoint from :streamGenerateContent to :generateContent
     guard let url =
-      URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=\(geminiAPIKey)")
+      URL(string: "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent")
     else {
       throw URLError(.badURL)
     }
@@ -304,6 +310,7 @@ class AITutorViewModel: ObservableObject {
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.setValue(geminiAPIKey, forHTTPHeaderField: "x-goog-api-key")
     request.httpBody = jsonData
 
     // --- Core change: Use data(for:) for a single response ---
