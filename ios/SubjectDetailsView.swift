@@ -1,4 +1,4 @@
-// Copyright 2025 David Sansome
+// Copyright 2026 Omar Candelaria
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -521,6 +521,35 @@ class SubjectDetailsView: UITableView, SubjectChipDelegate {
       })
   }
 
+  private func addContextAndNuances(subject: TKMSubject,
+                                    studyMaterials _: TKMStudyMaterials?,
+                                    toModel model: MutableTableModel) -> IndexPath? {
+    if !Settings.enableContextAndNuancesAI {
+      return nil
+    }
+    if subject.hasRadical {
+      return nil
+    }
+
+    let japaneseText = subject.japanese
+    var meaning = ""
+    for m in subject.meanings {
+      if m.type == .primary {
+        meaning = m.meaning
+        break
+      }
+    }
+    let subjectType = subject.hasKanji ? "Kanji" : "Vocabulary"
+
+    let indexPath = model.add(section: "Context and Nuances")
+    let viewModel = ContextAndNuancesViewModel(japaneseText: japaneseText, meaning: meaning,
+                                               subjectType: subjectType)
+    let item = ContextAndNuancesModelItem(viewModel: viewModel,
+                                          font: UIFont.systemFont(ofSize: kFontSize))
+    model.add(item)
+    return indexPath
+  }
+
   public func update(withSubject subject: TKMSubject, studyMaterials: TKMStudyMaterials?,
                      assignment: TKMAssignment?, task: ReviewItem?) {
     if FeatureFlags.dumpSubjectTextproto {
@@ -594,6 +623,8 @@ class SubjectDetailsView: UITableView, SubjectChipDelegate {
                                               hint: subject.kanji.meaningHint,
                                               note: meaningNote,
                                               noteChangedCallback: setMeaningNote)
+      let contextAndNuances = addContextAndNuances(subject: subject, studyMaterials: studyMaterials,
+                                                   toModel: model)
       let readingExplanation = addExplanation(model: model, title: "Reading Explanation",
                                               text: subject.kanji.readingMnemonic,
                                               hint: subject.kanji.readingHint,
@@ -602,11 +633,13 @@ class SubjectDetailsView: UITableView, SubjectChipDelegate {
 
       if !meaningShown, !readingShown {
         addShowAllButton(hiddenIndexPaths: [meanings, readings, meaningExplanation,
+                                            contextAndNuances,
                                             readingExplanation],
                          model: model)
       } else if !meaningShown {
         // Reading explanations often contain the meaning, so hide it as well.
-        addShowAllButton(hiddenIndexPaths: [meanings, meaningExplanation, readingExplanation],
+        addShowAllButton(hiddenIndexPaths: [meanings, meaningExplanation, contextAndNuances,
+                                            readingExplanation],
                          model: model)
       } else if !readingShown {
         addShowAllButton(hiddenIndexPaths: [readings, readingExplanation], model: model)
@@ -626,6 +659,8 @@ class SubjectDetailsView: UITableView, SubjectChipDelegate {
                                               text: subject.vocabulary.meaningExplanation,
                                               note: meaningNote,
                                               noteChangedCallback: setMeaningNote)
+      let contextAndNuances = addContextAndNuances(subject: subject, studyMaterials: studyMaterials,
+                                                   toModel: model)
       let readingExplanation = addExplanation(model: model, title: "Reading Explanation",
                                               text: subject.vocabulary.readingExplanation,
                                               note: studyMaterials?.readingNote,
@@ -633,11 +668,13 @@ class SubjectDetailsView: UITableView, SubjectChipDelegate {
 
       if !meaningShown, !readingShown {
         addShowAllButton(hiddenIndexPaths: [meanings, readings, meaningExplanation,
+                                            contextAndNuances,
                                             readingExplanation],
                          model: model)
       } else if !meaningShown {
         // Reading explanations often contain the meaning, so hide it as well.
-        addShowAllButton(hiddenIndexPaths: [meanings, meaningExplanation, readingExplanation],
+        addShowAllButton(hiddenIndexPaths: [meanings, meaningExplanation, contextAndNuances,
+                                            readingExplanation],
                          model: model)
       } else if !readingShown {
         addShowAllButton(hiddenIndexPaths: [readings, readingExplanation], model: model)

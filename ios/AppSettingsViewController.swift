@@ -1,4 +1,4 @@
-// Copyright 2025 David Sansome
+// Copyright 2026 Omar Candelaria
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -227,6 +227,14 @@ class AITutorSettingsViewController: UITableViewController, TKMViewController {
       Settings.geminiAPIKey = text
     }
     model.add(geminiAPIKeyItem)
+
+    model.add(SwitchModelItem(style: .subtitle,
+                              title: "Context and Nuances",
+                              subtitle: "Adds an AI generated section to the subject details screen.",
+                              on: Settings.enableContextAndNuancesAI,
+                              switchHandler: { switchView in
+                                Settings.enableContextAndNuancesAI = switchView.isOn
+                              }))
 
     self.model = model
     model.reloadTable()

@@ -1,4 +1,4 @@
-// Copyright 2025 David Sansome
+// Copyright 2026 Omar Candelaria
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -222,7 +222,7 @@ class LocalCachingClient: NSObject, SubjectLevelGetter {
 
   class func databaseUrl() -> URL {
     if let url = FileManager.default
-      .containerURL(forSecurityApplicationGroupIdentifier: "group.app.hanaso.tsurukame") {
+      .containerURL(forSecurityApplicationGroupIdentifier: "group.app.yomou.tsurukame") {
       return url.appendingPathComponent("local-cache.db")
     }
     let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)

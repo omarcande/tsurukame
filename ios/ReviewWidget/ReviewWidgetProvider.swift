@@ -1,4 +1,4 @@
-// Copyright 2025 David Sansome
+// Copyright 2026 Omar Candelaria
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ struct ReviewWidgetProvider: TimelineProvider {
   }
 
   private func readReviewItems() -> [SharedReviewItem] {
-    let sharedDefaults = UserDefaults(suiteName: "group.app.hanaso.tsurukame")!
+    let sharedDefaults = UserDefaults(suiteName: "group.app.yomou.tsurukame")!
     if let data = sharedDefaults.data(forKey: "sharedReviewItems") {
       return (try? JSONDecoder().decode([SharedReviewItem].self, from: data)) ?? []
     }
