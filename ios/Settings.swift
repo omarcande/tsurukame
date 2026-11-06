@@ -1,4 +1,4 @@
-// Copyright 2025 David Sansome
+// Copyright 2026 Omar Candelaria
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -225,6 +225,7 @@ protocol SettingProtocol {
 
   @Setting("", "voicevoxURL") static var voicevoxURL: String
   @Setting("", #keyPath(geminiAPIKey)) static var geminiAPIKey: String
+  @Setting(false, #keyPath(enableContextAndNuancesAI)) static var enableContextAndNuancesAI: Bool
 
   @Setting(true, #keyPath(animateParticleExplosion)) static var animateParticleExplosion: Bool
   @Setting(true, #keyPath(animateLevelUpPopup)) static var animateLevelUpPopup: Bool

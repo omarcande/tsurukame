@@ -1,4 +1,4 @@
-// Copyright 2025 David Sansome
+// Copyright 2026 Omar Candelaria
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import WidgetKit
 // The maximum number of local notifications you can add to a NotificationCenter before it starts
 // removing old ones.
 private let kMaxLocalNotifications = 64
-private let kRefreshReviewWidgetTaskIdentifier = "app.hanaso.tsurukame.refreshReviewWidget"
+private let kRefreshReviewWidgetTaskIdentifier = "app.yomou.tsurukame.refreshReviewWidget"
 
 class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelegate {
   var window: UIWindow?
@@ -336,7 +336,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelega
 
       let fileManager = FileManager.default
       if let url = fileManager
-        .containerURL(forSecurityApplicationGroupIdentifier: "group.app.hanaso.tsurukame") {
+        .containerURL(forSecurityApplicationGroupIdentifier: "group.app.yomou.tsurukame") {
         let fileURL = url.appendingPathComponent("latest_review.json")
         do {
           let data = try JSONEncoder().encode(sharedReviewItem)

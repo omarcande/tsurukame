@@ -21,6 +21,7 @@
 		07E34B2C2DF36C7A0016499B /* VoicevoxVoiceSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E34B2B2DF36C6D0016499B /* VoicevoxVoiceSelectionView.swift */; };
 		07F03F332EF09CF20036B9C8 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 07F03F322EF09CF20036B9C8 /* DGCharts */; };
 		14085016122028D0C04146EC /* Pods_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD307118D620EB75F521BA94 /* Pods_Tests.framework */; };
+		1EFF4CCCF70F9757209CBBD1 /* ContextAndNuancesModelItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61A9A8104FD6F0107FEB918 /* ContextAndNuancesModelItem.swift */; };
 		480B243123D6830300FC2A82 /* Rexy in Frameworks */ = {isa = PBXBuildFile; productRef = 480B243023D6830300FC2A82 /* Rexy */; };
 		481B2FED23C55AAF0041EF1F /* CurrentLevelReviewTimeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481B2FEC23C55AAF0041EF1F /* CurrentLevelReviewTimeItem.swift */; };
 		4820306724D849E100B40FDD /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633632EE201F3490006D582B /* Settings.swift */; };
@@ -209,6 +210,7 @@
 		C92AB972237F2E8200F79904 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92AB971237F2E8200F79904 /* DataManager.swift */; };
 		C943D5B02380D59B004A7969 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C943D5AF2380D59A004A7969 /* SettingsController.swift */; };
 		C970BC0323D262CE001F3735 /* SiriShortcutHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C970BC0223D262CE001F3735 /* SiriShortcutHelper.swift */; };
+		CA8404568D96839EECDCDC63 /* ContextAndNuancesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16C0D24A113598E0E8EE042 /* ContextAndNuancesViewModel.swift */; };
 		E881943B2A6BC0CF002C2E1C /* ArtworkModelItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E881943A2A6BC0CF002C2E1C /* ArtworkModelItem.swift */; };
 		E881943F2A6BC38A002C2E1C /* ArtworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E881943E2A6BC38A002C2E1C /* ArtworkManager.swift */; };
 		FB58BA0511AC0FF57B9CED41 /* Pods_Tsurukame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1733A4F2A54FA9253F318A36 /* Pods_Tsurukame.framework */; };
@@ -503,6 +505,8 @@
 		C92AB971237F2E8200F79904 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		C943D5AF2380D59A004A7969 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		C970BC0223D262CE001F3735 /* SiriShortcutHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriShortcutHelper.swift; sourceTree = "<group>"; };
+		E16C0D24A113598E0E8EE042 /* ContextAndNuancesViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContextAndNuancesViewModel.swift; sourceTree = "<group>"; };
+		E61A9A8104FD6F0107FEB918 /* ContextAndNuancesModelItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ContextAndNuancesModelItem.swift; path = Tables/ContextAndNuancesModelItem.swift; sourceTree = "<group>"; };
 		E881943A2A6BC0CF002C2E1C /* ArtworkModelItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtworkModelItem.swift; sourceTree = "<group>"; };
 		E881943E2A6BC38A002C2E1C /* ArtworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtworkManager.swift; sourceTree = "<group>"; };
 		FD307118D620EB75F521BA94 /* Pods_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -786,6 +790,8 @@
 				633AFAE52352B6F2004F732F /* VocabularyHighlighter.swift */,
 				C92AB96E237F280300F79904 /* WatchHelper.swift */,
 				07688F4F2E6FB04000FD5F35 /* ReviewWidgetExtension.appex */,
+				E16C0D24A113598E0E8EE042 /* ContextAndNuancesViewModel.swift */,
+				E61A9A8104FD6F0107FEB918 /* ContextAndNuancesModelItem.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1696,6 +1702,8 @@
 				63C74C7F25C96F58004F6C99 /* SubjectDelegate.swift in Sources */,
 				63D1026923D7ED3200838F7C /* UIWindow+InterfaceStyle.swift in Sources */,
 				0725471A2E70869F004DD2B6 /* ReviewWidgetDataUpdater.swift in Sources */,
+				CA8404568D96839EECDCDC63 /* ContextAndNuancesViewModel.swift in Sources */,
+				1EFF4CCCF70F9757209CBBD1 /* ContextAndNuancesModelItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1861,7 +1869,7 @@
 					"\"SystemConfiguration\"",
 				);
 				OTHER_MODULE_VERIFIER_FLAGS = "${inherited}";
-				PRODUCT_BUNDLE_IDENTIFIER = app.hanaso.tsurukame.ReviewWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = app.yomou.tsurukame.ReviewWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = YES;
@@ -1910,7 +1918,7 @@
 					"\"SystemConfiguration\"",
 				);
 				OTHER_MODULE_VERIFIER_FLAGS = "${inherited}";
-				PRODUCT_BUNDLE_IDENTIFIER = app.hanaso.tsurukame.ReviewWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = app.yomou.tsurukame.ReviewWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = YES;
@@ -2073,7 +2081,7 @@
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = app.hanaso.tsurukame;
+				PRODUCT_BUNDLE_IDENTIFIER = app.yomou.tsurukame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = YES;
@@ -2109,7 +2117,7 @@
 				MARKETING_VERSION = 1.17;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = app.hanaso.tsurukame;
+				PRODUCT_BUNDLE_IDENTIFIER = app.yomou.tsurukame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = YES;
@@ -2359,7 +2367,7 @@
 				MARKETING_VERSION = 1.18;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = app.hanaso.tsurukame.wanikani.watchapp;
+				PRODUCT_BUNDLE_IDENTIFIER = app.yomou.tsurukame.wanikani.watchapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
@@ -2378,18 +2386,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1114;
-				DEVELOPMENT_TEAM = 7B2GP77Y4A;
+				DEVELOPMENT_TEAM = RMRGTD28A8;
 				IBSC_MODULE = Tsurukame_Complication_Extension;
 				INFOPLIST_FILE = Complication/Info.plist;
 				MARKETING_VERSION = 1.18;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.wanikani.watchapp;
+				PRODUCT_BUNDLE_IDENTIFIER = app.yomou.tsurukame.wanikani.watchapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "df06fa1e-0be6-4ca1-8d8d-352da185fec6";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.davidsansome.wanikani.watchapp";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -2418,7 +2426,7 @@
 				MARKETING_VERSION = 1.18;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = app.hanaso.tsurukame.wanikani.watchapp.c;
+				PRODUCT_BUNDLE_IDENTIFIER = app.yomou.tsurukame.wanikani.watchapp.c;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
@@ -2437,10 +2445,10 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1114;
-				DEVELOPMENT_TEAM = 7B2GP77Y4A;
+				DEVELOPMENT_TEAM = RMRGTD28A8;
 				INFOPLIST_FILE = ComplicationExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2449,10 +2457,9 @@
 				);
 				MARKETING_VERSION = 1.18;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.wanikani.watchapp.c;
+				PRODUCT_BUNDLE_IDENTIFIER = app.yomou.tsurukame.wanikani.watchapp.c;
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "a1f9acf7-3902-4937-a701-fd4e488ec576";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.davidsansome.wanikani.watchapp.c";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
