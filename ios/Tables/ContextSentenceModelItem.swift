@@ -86,7 +86,10 @@ class ContextSentenceModelItem: AttributedModelItem {
   }
 
   func presentAITutor(with sentence: String) {
-    guard let topVC = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?
+    guard let topVC = UIApplication.shared.connectedScenes
+      .compactMap({ $0 as? UIWindowScene })
+      .flatMap(\.windows)
+      .first(where: \.isKeyWindow)?
       .rootViewController else {
       return
     }

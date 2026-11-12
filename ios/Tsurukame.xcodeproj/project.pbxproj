@@ -1452,7 +1452,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\n# Run clang-format on all .h, .m or .mm files.\nfind . -not '(' \\\n       -path '*/Pods/*' -or \\\n       -name 'Reachability.*' -or \\\n       -name '*.pbobjc.*' \\\n     ')' -and '(' \\\n       -name '*.h' -or \\\n       -name '*.m' -or \\\n       -name '*.mm' \\\n     ')' \\\n     -exec ../utils/clang-format -style=file -i {} '+'\n";
+			shellScript = "set -e\n\nif CLANG_FORMAT=$(xcrun -f clang-format 2>/dev/null); then\n  :\nelif ../utils/clang-format --version >/dev/null 2>&1; then\n  CLANG_FORMAT=\"../utils/clang-format\"\nelse\n  echo \"warning: clang-format not available; skipping.\"\n  exit 0\nfi\n\n# Run clang-format on all .h, .m or .mm files.\nfind . -not '(' \\\n       -path '*/Pods/*' -or \\\n       -path '*/.build/*' -or \\\n       -name 'Reachability.*' -or \\\n       -name '*.pbobjc.*' \\\n     ')' -and '(' \\\n       -name '*.h' -or \\\n       -name '*.m' -or \\\n       -name '*.mm' \\\n     ')' \\\n     -exec \"$CLANG_FORMAT\" -style=file -i {} '+'\n";
 		};
 		63C4EA512C257E7F003D3C0B /* Run SwiftGen */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1984,7 +1984,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = .;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -2044,7 +2044,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = .;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-lcompression";
@@ -2376,7 +2376,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
@@ -2403,7 +2403,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
 		};
@@ -2435,7 +2435,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
@@ -2465,7 +2465,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
 		};

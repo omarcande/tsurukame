@@ -181,7 +181,14 @@ class Audio: NSObject {
     let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
     ac.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
 
-    let vc = UIApplication.shared.keyWindow!.rootViewController!
+    guard let vc = UIApplication.shared.connectedScenes
+      .compactMap({ $0 as? UIWindowScene })
+      .flatMap(\.windows)
+      .first(where: \.isKeyWindow)?
+      .rootViewController
+    else {
+      return
+    }
     vc.present(ac, animated: true, completion: nil)
   }
 

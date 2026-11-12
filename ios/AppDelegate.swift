@@ -38,20 +38,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelega
 
     Screenshotter.setUp()
 
-    window?.setInterfaceStyle(Settings.interfaceStyle)
     application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-
-    storyboard = window!.rootViewController!.storyboard
-    navigationController = (window!.rootViewController as! UINavigationController)
     services = TKMServices()
 
     let nc = NotificationCenter.default
     nc.addObserver(self, selector: #selector(logout), name: .logout, object: nil)
 
-    if !Settings.userApiToken.isEmpty {
-      setMainViewControllerAnimated(animated: false, clearUserData: false)
-    } else {
-      pushLoginViewController()
+    if let window = window {
+      configureWindow(window)
     }
 
     BGTaskScheduler.shared.register(forTaskWithIdentifier: kRefreshReviewWidgetTaskIdentifier,
@@ -60,6 +54,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelega
     }
 
     return true
+  }
+
+  func configureWindow(_ window: UIWindow) {
+    self.window = window
+    window.setInterfaceStyle(Settings.interfaceStyle)
+
+    if !(window.rootViewController is UINavigationController) {
+      window.rootViewController = StoryboardScene.Navigation.initialScene.instantiate()
+    }
+    storyboard = window.rootViewController?.storyboard
+    navigationController = (window.rootViewController as! UINavigationController)
+
+    if navigationController.viewControllers.isEmpty {
+      if !Settings.userApiToken.isEmpty {
+        setMainViewControllerAnimated(animated: false, clearUserData: false)
+      } else {
+        pushLoginViewController()
+      }
+    }
+    window.makeKeyAndVisible()
+  }
+
+  func application(_: UIApplication,
+                   configurationForConnecting connectingSceneSession: UISceneSession,
+                   options _: UIScene.ConnectionOptions) -> UISceneConfiguration {
+    let configuration = UISceneConfiguration(name: "Default Configuration",
+                                             sessionRole: connectingSceneSession.role)
+    configuration.delegateClass = SceneDelegate.self
+    configuration.storyboard = UIStoryboard(name: "Navigation", bundle: nil)
+    return configuration
   }
 
   func application(_: UIApplication,
@@ -411,5 +435,64 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelega
     }
 
     return true
+  }
+}
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+  var window: UIWindow?
+
+  private var appDelegate: AppDelegate? {
+    UIApplication.shared.delegate as? AppDelegate
+  }
+
+  func scene(_ scene: UIScene,
+             willConnectTo _: UISceneSession,
+             options connectionOptions: UIScene.ConnectionOptions) {
+    guard let windowScene = scene as? UIWindowScene else { return }
+    let window = self.window ?? UIWindow(windowScene: windowScene)
+    self.window = window
+
+    guard let appDelegate = appDelegate else { return }
+    appDelegate.configureWindow(window)
+
+    if let url = connectionOptions.urlContexts.first?.url {
+      _ = appDelegate.handleApplink(url: url)
+    }
+    if let userActivity = connectionOptions.userActivities.first {
+      _ = appDelegate.application(UIApplication.shared,
+                                  willContinueUserActivityWithType: userActivity.activityType)
+      _ = appDelegate.application(UIApplication.shared,
+                                  continue: userActivity,
+                                  restorationHandler: { _ in })
+    }
+  }
+
+  func sceneDidBecomeActive(_: UIScene) {
+    appDelegate?.applicationDidBecomeActive(UIApplication.shared)
+  }
+
+  func sceneWillResignActive(_: UIScene) {
+    appDelegate?.applicationWillResignActive(UIApplication.shared)
+  }
+
+  func sceneDidEnterBackground(_: UIScene) {
+    appDelegate?.applicationDidEnterBackground(UIApplication.shared)
+  }
+
+  func scene(_: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+    if let url = URLContexts.first?.url {
+      _ = appDelegate?.handleApplink(url: url)
+    }
+  }
+
+  func scene(_: UIScene, willContinueUserActivityWithType userActivityType: String) {
+    _ = appDelegate?.application(UIApplication.shared,
+                                 willContinueUserActivityWithType: userActivityType)
+  }
+
+  func scene(_: UIScene, continue userActivity: NSUserActivity) {
+    _ = appDelegate?.application(UIApplication.shared,
+                                 continue: userActivity,
+                                 restorationHandler: { _ in })
   }
 }
