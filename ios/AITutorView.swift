@@ -92,8 +92,8 @@ struct AITutorView: View {
                 .fontWeight(.medium)
                 .foregroundColor(Color.vocabPurpleInverted)
 
-              Text(convertToAttributedString(response))
-                .font(.body)
+              MarkdownContentView(markdown: response)
+                .textSelection(.enabled)
 
               Divider()
                 .padding(.top, 4)
@@ -197,17 +197,306 @@ struct AITutorView: View {
       return .white
     }
   }
+}
 
-  // Helper function to convert a Markdown string to AttributedString
-  private func convertToAttributedString(_ markdownString: String) -> AttributedString {
+// MARK: - Native SwiftUI Markdown Renderer
+
+private struct MarkdownContentView: View {
+  let markdown: String
+
+  fileprivate enum Block {
+    case heading(level: Int, text: String)
+    case bulletItem(level: Int, text: String)
+    case numberedItem(level: Int, number: String, text: String)
+    case blockquote(text: String)
+    case codeBlock(code: String)
+    case divider
+    case paragraph(text: String)
+
+    var isListItem: Bool {
+      switch self {
+      case .bulletItem, .numberedItem:
+        return true
+      default:
+        return false
+      }
+    }
+  }
+
+  var body: some View {
+    let blocks = Self.parseBlocks(from: markdown)
+    VStack(alignment: .leading, spacing: 6) {
+      ForEach(Array(blocks.enumerated()), id: \.offset) { index, block in
+        blockView(for: block)
+          .padding(.top, topPadding(for: block, at: index, in: blocks))
+      }
+    }
+  }
+
+  private func topPadding(for block: Block, at index: Int, in blocks: [Block]) -> CGFloat {
+    guard index > 0 else { return 0 }
+    switch block {
+    case .heading:
+      return 8
+    case .bulletItem, .numberedItem:
+      return blocks[index - 1].isListItem ? 0 : 4
+    case .paragraph, .blockquote, .codeBlock, .divider:
+      return 4
+    }
+  }
+
+  @ViewBuilder
+  private func blockView(for block: Block) -> some View {
+    switch block {
+    case let .heading(level, text):
+      Text(Self.inlineAttributedString(text))
+        .font(headingFont(for: level))
+        .foregroundColor(Color.vocabPurpleInverted)
+        .fixedSize(horizontal: false, vertical: true)
+
+    case let .bulletItem(level, text):
+      HStack(alignment: .firstTextBaseline, spacing: 8) {
+        Text(bulletSymbol(for: level))
+          .font(.body.weight(.semibold))
+          .foregroundColor(Color.vocabPurpleInverted)
+        Text(Self.inlineAttributedString(text))
+          .font(.body)
+          .fixedSize(horizontal: false, vertical: true)
+      }
+      .padding(.leading, CGFloat(level) * 18)
+
+    case let .numberedItem(level, number, text):
+      HStack(alignment: .firstTextBaseline, spacing: 8) {
+        Text(number)
+          .font(.body.weight(.semibold))
+          .foregroundColor(Color.vocabPurpleInverted)
+        Text(Self.inlineAttributedString(text))
+          .font(.body)
+          .fixedSize(horizontal: false, vertical: true)
+      }
+      .padding(.leading, CGFloat(level) * 18)
+
+    case let .blockquote(text):
+      HStack(alignment: .top, spacing: 10) {
+        RoundedRectangle(cornerRadius: 1.5)
+          .fill(Color.vocabPurpleInverted)
+          .frame(width: 3)
+        Text(Self.inlineAttributedString(text))
+          .font(.body)
+          .foregroundColor(.secondary)
+          .fixedSize(horizontal: false, vertical: true)
+      }
+      .padding(.vertical, 2)
+
+    case let .codeBlock(code):
+      ScrollView(.horizontal, showsIndicators: false) {
+        Text(code)
+          .font(.system(.callout, design: .monospaced))
+          .padding(10)
+      }
+      .frame(maxWidth: .infinity, alignment: .leading)
+      .background(Color(.tertiarySystemFill))
+      .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+
+    case .divider:
+      Divider()
+        .padding(.vertical, 4)
+
+    case let .paragraph(text):
+      Text(Self.inlineAttributedString(text))
+        .font(.body)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+  }
+
+  private func headingFont(for level: Int) -> SwiftUI.Font {
+    switch level {
+    case 1:
+      return .title3.weight(.bold)
+    case 2:
+      return .headline.weight(.bold)
+    default:
+      return .subheadline.weight(.semibold)
+    }
+  }
+
+  private func bulletSymbol(for level: Int) -> String {
+    switch level {
+    case 0:
+      return "•"
+    case 1:
+      return "◦"
+    default:
+      return "▪"
+    }
+  }
+
+  private static func inlineAttributedString(_ markdownString: String) -> AttributedString {
     do {
       return try AttributedString(markdown: markdownString,
                                   options: AttributedString
                                     .MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace))
     } catch {
-      print("Error parsing Markdown: \(error.localizedDescription)")
       return AttributedString(markdownString)
     }
+  }
+
+  private static func parseBlocks(from markdown: String) -> [Block] {
+    let lines = markdown.replacingOccurrences(of: "\r\n", with: "\n")
+      .components(separatedBy: "\n")
+
+    var blocks: [Block] = []
+    var paragraphLines: [String] = []
+    var codeBlockLines: [String] = []
+    var isInCodeBlock = false
+
+    func flushParagraph() {
+      guard !paragraphLines.isEmpty else { return }
+      blocks.append(.paragraph(text: paragraphLines.joined(separator: "\n")))
+      paragraphLines.removeAll()
+    }
+
+    for rawLine in lines {
+      let trimmed = rawLine.trimmingCharacters(in: .whitespaces)
+
+      if trimmed.hasPrefix("```") {
+        flushParagraph()
+        if isInCodeBlock {
+          blocks.append(.codeBlock(code: codeBlockLines.joined(separator: "\n")))
+          codeBlockLines.removeAll()
+          isInCodeBlock = false
+        } else {
+          isInCodeBlock = true
+        }
+        continue
+      }
+
+      if isInCodeBlock {
+        codeBlockLines.append(rawLine)
+        continue
+      }
+
+      if trimmed.isEmpty {
+        flushParagraph()
+        continue
+      }
+
+      // Horizontal rule (---, ***, ___)
+      if isHorizontalRule(trimmed) {
+        flushParagraph()
+        blocks.append(.divider)
+        continue
+      }
+
+      // ATX Heading (#, ##, ###, ...)
+      if let (level, headingText) = parseATXHeading(trimmed) {
+        flushParagraph()
+        blocks.append(.heading(level: level, text: headingText))
+        continue
+      }
+
+      // Standalone bold section heading (e.g., "**Translation:**" or "**Breakdown and
+      // Explanation:**")
+      if let boldHeadingText = parseStandaloneBoldHeading(trimmed) {
+        flushParagraph()
+        blocks.append(.heading(level: 3, text: boldHeadingText))
+        continue
+      }
+
+      let leadingSpaces = rawLine.prefix(while: { $0 == " " || $0 == "\t" })
+        .reduce(0) { $0 + ($1 == "\t" ? 4 : 1) }
+      let indentLevel = (leadingSpaces + 2) / 4
+
+      // Bullet list item (-, *, +)
+      if let itemText = parseBulletItem(trimmed) {
+        flushParagraph()
+        blocks.append(.bulletItem(level: indentLevel, text: itemText))
+        continue
+      }
+
+      // Numbered list item (1., 2), etc.)
+      if let (number, itemText) = parseNumberedItem(trimmed) {
+        flushParagraph()
+        blocks.append(.numberedItem(level: indentLevel, number: number, text: itemText))
+        continue
+      }
+
+      // Blockquote (> ...)
+      if trimmed.hasPrefix(">") {
+        flushParagraph()
+        let quoteText = String(trimmed.dropFirst()).trimmingCharacters(in: .whitespaces)
+        blocks.append(.blockquote(text: quoteText))
+        continue
+      }
+
+      paragraphLines.append(trimmed)
+    }
+
+    if isInCodeBlock, !codeBlockLines.isEmpty {
+      blocks.append(.codeBlock(code: codeBlockLines.joined(separator: "\n")))
+    }
+    flushParagraph()
+
+    return blocks
+  }
+
+  private static func isHorizontalRule(_ trimmed: String) -> Bool {
+    guard trimmed.count >= 3 else { return false }
+    let chars = Set(trimmed.filter { !$0.isWhitespace })
+    guard chars.count == 1, let char = chars.first else { return false }
+    return (char == "-" || char == "*" || char == "_") &&
+      trimmed.filter { $0 == char }.count >= 3
+  }
+
+  private static func parseATXHeading(_ trimmed: String) -> (Int, String)? {
+    let hashes = trimmed.prefix(while: { $0 == "#" })
+    guard !hashes.isEmpty, hashes.count <= 6 else { return nil }
+    let remainder = trimmed.dropFirst(hashes.count)
+    guard remainder.first == " " else { return nil }
+    let text = remainder.trimmingCharacters(in: .whitespaces)
+    guard !text.isEmpty else { return nil }
+    return (hashes.count, text)
+  }
+
+  private static func parseStandaloneBoldHeading(_ trimmed: String) -> String? {
+    guard trimmed.hasPrefix("**") else { return nil }
+    var remainder = String(trimmed.dropFirst(2))
+    let hasTrailingColonOutside: Bool
+    if remainder.hasSuffix("**:") {
+      remainder = String(remainder.dropLast(3))
+      hasTrailingColonOutside = true
+    } else if remainder.hasSuffix("**") {
+      remainder = String(remainder.dropLast(2))
+      hasTrailingColonOutside = false
+    } else {
+      return nil
+    }
+    guard !remainder.isEmpty, remainder.count <= 60, !remainder.contains("**") else {
+      return nil
+    }
+    return hasTrailingColonOutside ? "\(remainder):" : remainder
+  }
+
+  private static func parseBulletItem(_ trimmed: String) -> String? {
+    for prefix in ["- ", "* ", "+ ", "• "] {
+      if trimmed.hasPrefix(prefix) {
+        return String(trimmed.dropFirst(prefix.count)).trimmingCharacters(in: .whitespaces)
+      }
+    }
+    return nil
+  }
+
+  private static func parseNumberedItem(_ trimmed: String) -> (String, String)? {
+    let digits = trimmed.prefix(while: \.isNumber)
+    guard !digits.isEmpty else { return nil }
+    let afterDigits = trimmed.dropFirst(digits.count)
+    guard let delimiter = afterDigits.first, delimiter == "." || delimiter == ")" else {
+      return nil
+    }
+    let afterDelimiter = afterDigits.dropFirst()
+    guard afterDelimiter.first == " " else { return nil }
+    let text = afterDelimiter.trimmingCharacters(in: .whitespaces)
+    return ("\(digits)\(delimiter)", text)
   }
 }
 
@@ -281,7 +570,6 @@ class AITutorViewModel: ObservableObject {
     isLoading = false
   }
 
-  // Renamed from fetchFromGeminiStreamed to reflect non-streaming
   private func fetchFromGemini(sentence: String) async throws {
     let geminiAPIKey = Settings.geminiAPIKey
     if geminiAPIKey.isEmpty {
@@ -289,31 +577,42 @@ class AITutorViewModel: ObservableObject {
       return
     }
 
-    // Changed endpoint from :streamGenerateContent to :generateContent
-    guard let url =
-      URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent")
-    else {
+    // Combine generalInstructions and exampleUserInput into the first "user" turn
+    // so roles strictly alternate: user -> model -> user.
+    let requestBody = GenerateContentRequest(contents: [
+      .init(role: "user", parts: [
+        .init(text: generalInstructions),
+        .init(text: exampleUserInput),
+      ]),
+      .init(role: "model", parts: [.init(text: exampleAIResponse)]),
+      .init(role: "user", parts: [.init(text: sentence)]),
+    ])
+
+    responseText = try await GeminiAPI.generateContent(requestBody: requestBody,
+                                                       apiKey: geminiAPIKey)
+  }
+}
+
+// MARK: - Shared Gemini API Client
+
+@MainActor
+enum GeminiAPI {
+  private static let endpoint =
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent"
+
+  static func generateContent(requestBody: GenerateContentRequest,
+                              apiKey: String) async throws -> String {
+    guard let url = URL(string: endpoint) else {
       throw URLError(.badURL)
     }
 
-    // --- Build request using typed Encodable structs to avoid type-checker blowups ---
-    let requestBody = GenerateContentRequest(contents: [
-      .init(role: "user", parts: [.init(text: generalInstructions)]),
-      .init(role: "user", parts: [.init(text: exampleUserInput)]),
-      .init(role: "model", parts: [.init(text: exampleAIResponse)]),
-      .init(role: "user", parts: [.init(text: sentence)]),
-    ],
-    generationConfig: .init(temperature: 0.7))
-
-    let jsonData = try JSONEncoder().encode(requestBody)
-
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
+    request.timeoutInterval = 30
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    request.setValue(geminiAPIKey, forHTTPHeaderField: "x-goog-api-key")
-    request.httpBody = jsonData
+    request.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key")
+    request.httpBody = try JSONEncoder().encode(requestBody)
 
-    // --- Core change: Use data(for:) for a single response ---
     let (data, response) = try await URLSession.shared.data(for: request)
 
     guard let httpResponse = response as? HTTPURLResponse else {
@@ -322,39 +621,32 @@ class AITutorViewModel: ObservableObject {
     }
 
     guard httpResponse.statusCode == 200 else {
+      let apiMessage = (try? JSONDecoder().decode(GeminiErrorResponse.self, from: data))?
+        .error?.message
       if let errorString = String(data: data, encoding: .utf8) {
-        print("Server Error Response Body: \(errorString)")
+        print("Gemini HTTP \(httpResponse.statusCode): \(errorString)")
       }
       throw URLError(.badServerResponse, userInfo: [
-        NSLocalizedDescriptionKey: "Server responded with status code \(httpResponse.statusCode)",
+        NSLocalizedDescriptionKey: apiMessage ??
+          "Server responded with status code \(httpResponse.statusCode)",
       ])
     }
 
-    // --- Decode the entire JSON response at once ---
-    do {
-      let decodedResponse = try JSONDecoder().decode(GeminiResponse.self, from: data)
-      // Extract the text from the first candidate's content parts
-      if let fullResponseText = decodedResponse.candidates.first?.content.parts.first?.text {
-        responseText = fullResponseText // Set the entire response at once
-      } else {
-        responseText = "No text content found in response."
-      }
-    } catch {
-      print("Error decoding full response JSON: \(error.localizedDescription)")
-      print("Received Data: \(String(data: data, encoding: .utf8) ?? "N/A")")
-      throw error // Re-throw the decoding error
+    let decodedResponse = try JSONDecoder().decode(GeminiResponse.self, from: data)
+    guard let text = decodedResponse.extractedText, !text.isEmpty else {
+      throw URLError(.cannotParseResponse, userInfo: [
+        NSLocalizedDescriptionKey: "No text content found in response.",
+      ])
     }
+
+    return text
   }
 }
 
-// MARK: - Encodable Structs for Request (fixes preview type-checking)
+// MARK: - Encodable Structs for Request
 
-/// Strongly-typed request body for the Gemini `:generateContent` endpoint.
-/// Using `Encodable` eliminates large `[String: Any]` literals that cause
-/// type-checker performance issues in SwiftUI previews.
 struct GenerateContentRequest: Encodable {
   var contents: [Content]
-  var generationConfig: GenerationConfig?
 
   struct Content: Encodable {
     var role: String
@@ -364,51 +656,48 @@ struct GenerateContentRequest: Encodable {
       var text: String
     }
   }
-
-  struct GenerationConfig: Encodable {
-    var temperature: Double?
-  }
 }
 
 // MARK: - Decodable Struct for Non-Streaming Gemini Response
 
-// This struct is now named GeminiResponse to represent the full, single response object.
-// Its structure is identical to what the streaming chunks would eventually aggregate into.
 struct GeminiResponse: Decodable {
-  let candidates: [Candidate]
-  // You might also find 'usageMetadata' or 'promptFeedback' at the top level
-  // in non-streaming responses, you can add them here if you need to parse them.
-  // let usageMetadata: UsageMetadata?
-  // let promptFeedback: PromptFeedback?
+  let candidates: [Candidate]?
 
   struct Candidate: Decodable {
-    let content: Content
-    // In non-streaming, you might also find 'finishReason' or 'safetyRatings' here
-    // let finishReason: String?
-    // let safetyRatings: [SafetyRating]?
+    let content: Content?
+    let finishReason: String?
 
     struct Content: Decodable {
-      let parts: [Part]
+      let parts: [Part]?
 
       struct Part: Decodable {
-        let text: String
+        let text: String?
+        let thought: Bool?
       }
     }
   }
-  // Example of how you'd add other top-level structs if needed:
-  // struct UsageMetadata: Decodable {
-  //     let promptTokenCount: Int
-  //     let candidatesTokenCount: Int
-  //     let totalTokenCount: Int
-  // }
-  // struct PromptFeedback: Decodable {
-  //     let blockReason: String?
-  //     let safetyRatings: [SafetyRating]?
-  // }
-  // struct SafetyRating: Decodable {
-  //     let category: String
-  //     let probability: String
-  // }
+
+  /// Extracts non-thinking text parts from the first candidate.
+  var extractedText: String? {
+    guard let parts = candidates?.first?.content?.parts else { return nil }
+    let nonThoughtTexts = parts
+      .filter { $0.thought != true }
+      .compactMap(\.text)
+    if !nonThoughtTexts.isEmpty {
+      return nonThoughtTexts.joined()
+    }
+    return parts.compactMap(\.text).last
+  }
+}
+
+struct GeminiErrorResponse: Decodable {
+  struct ErrorDetail: Decodable {
+    let code: Int?
+    let message: String?
+    let status: String?
+  }
+
+  let error: ErrorDetail?
 }
 
 // MARK: - Preview Support

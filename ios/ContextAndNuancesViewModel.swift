@@ -50,14 +50,6 @@ class ContextAndNuancesViewModel {
       return
     }
 
-    guard let url =
-      URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent")
-    else {
-      state = .error("Invalid URL")
-      onStateChange?(state)
-      return
-    }
-
     let generalInstructions = """
     You are a helpful and knowledgeable Japanese language tutor.
 
@@ -81,34 +73,18 @@ class ContextAndNuancesViewModel {
     """
 
     let requestBody = GenerateContentRequest(contents: [
-      .init(role: "user", parts: [.init(text: generalInstructions)]),
-      .init(role: "user", parts: [.init(text: exampleUserInput)]),
+      .init(role: "user", parts: [
+        .init(text: generalInstructions),
+        .init(text: exampleUserInput),
+      ]),
       .init(role: "model", parts: [.init(text: exampleAIResponse)]),
       .init(role: "user", parts: [.init(text: userInput)]),
-    ], generationConfig: .init(temperature: 0.7))
+    ])
 
     do {
-      let jsonData = try JSONEncoder().encode(requestBody)
-      var request = URLRequest(url: url)
-      request.httpMethod = "POST"
-      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-      request.setValue(geminiAPIKey, forHTTPHeaderField: "x-goog-api-key")
-      request.httpBody = jsonData
-
-      let (data, response) = try await URLSession.shared.data(for: request)
-
-      guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-        state = .error("Additional context not available at this time")
-        onStateChange?(state)
-        return
-      }
-
-      let decodedResponse = try JSONDecoder().decode(GeminiResponse.self, from: data)
-      if let fullResponseText = decodedResponse.candidates.first?.content.parts.first?.text {
-        state = .success(fullResponseText.trimmingCharacters(in: .whitespacesAndNewlines))
-      } else {
-        state = .error("Additional context not available at this time")
-      }
+      let fullResponseText = try await GeminiAPI.generateContent(requestBody: requestBody,
+                                                                 apiKey: geminiAPIKey)
+      state = .success(fullResponseText.trimmingCharacters(in: .whitespacesAndNewlines))
     } catch {
       state = .error("Additional context not available at this time")
     }

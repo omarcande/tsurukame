@@ -51,8 +51,8 @@ struct ReviewWidgetView: View {
     let vocabularyGradient = [vocabularyColor1, vocabularyColor2]
 
     let darkGradient = [
-      Color(red: 28 / 255, green: 28 / 255, blue: 30 / 255),
-      Color(red: 10 / 255, green: 10 / 255, blue: 12 / 255),
+      Color(red: 14 / 255, green: 14 / 255, blue: 16 / 255),
+      Color.black,
     ]
 
     let gradient = switch entry.reviewItem?.type {
